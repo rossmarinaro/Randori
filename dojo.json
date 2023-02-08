@@ -25,7 +25,51 @@
          "draworder":"topdown",
          "id":9,
          "name":"bounds",
-         "objects":[],
+         "objects":[
+                {
+                 "height":3,
+                 "id":330,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":289.333333333333,
+                 "x":-0.666666666666667,
+                 "y":141.333333333333
+                }, 
+                {
+                 "height":4.66666666666666,
+                 "id":331,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":293,
+                 "x":-2,
+                 "y":57
+                }, 
+                {
+                 "height":83.3333333333333,
+                 "id":333,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":3.33333333333333,
+                 "x":-1,
+                 "y":60.6666666666667
+                }, 
+                {
+                 "height":82.6666666666667,
+                 "id":334,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":2.66666666666669,
+                 "x":286.333333333333,
+                 "y":60
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -33,7 +77,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":330,
+ "nextobjectid":335,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.3.4",
