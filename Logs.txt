@@ -1,0 +1,38 @@
+Application started. 👌  ::Time stamp: Sun Feb 19 22:41:34 2023
+
+window initialized  ::Time stamp: Sun Feb 19 22:41:34 2023
+
+GL VERSION:  3.0.0 - Build 20.19.15.5126  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+SHADER: VERTEX COMPILED SUCESSFULLY.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+SHADER: FRAGMENT COMPILED SUCESSFULLY.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+SHADER: PROGRAM LINKED SUCESSFULLY.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Image of key: cheese not found.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Image of key: map not found.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Image of key: pastaboss bass not found.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Image of key: swanky velvet not found.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Resources Initialized.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Sprite dojo Created.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Sprite uke Created.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+frames contained in spritesheet:  35  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Sprite nage Created.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+frames contained in spritesheet:  35  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Sprite logo Created.  ::Time stamp: Sun Feb 19 22:41:35 2023
+
+Sprite dojo Destroyed.  ::Time stamp: Sun Feb 19 22:41:52 2023
+
+Sprite logo Destroyed.  ::Time stamp: Sun Feb 19 22:41:52 2023
+
