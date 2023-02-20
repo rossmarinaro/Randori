@@ -24,9 +24,10 @@ export class Main extends Phaser.Scene {
     //       flipX = spawn[2],
     //       anim = spawn[3];
 
-    // const player = new System.config.player(this, spawnX, spawnY, flipX, anim)
+     const player = new System.config.player(this, this.scale.width / 2, this.scale.height / 2);
 
-    this.cameras.main.setZoom(5).centerOn(this.scale.width / 2, this.scale.height / 2)
+
+    this.cameras.main.centerOn(this.scale.width / 2, this.scale.height / 2);
 
 
 

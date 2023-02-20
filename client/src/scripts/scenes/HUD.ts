@@ -1,9 +1,7 @@
-import FpsText from '../objects/fpsText'
 
 
 export class HUD extends Phaser.Scene {
 
-    private fpsText: FpsText;
     private _scene: Phaser.Scene | any;
     private timeElapsed: Phaser.GameObjects.Text;
     private _time: number;
@@ -16,16 +14,7 @@ export class HUD extends Phaser.Scene {
 
         this._scene = scene;
 
-    // display the Phaser.VERSION
-        // this.add
-        // .text(this.cameras.main.width - 15, 15, `Phaser v${Phaser.VERSION}`, {
-        // color: '#000000',
-        // fontSize: '3rem'
-        // })   
-        // .setOrigin(1, 0)
-
-
-        // this.fpsText = new FpsText(this)
+        this.add.text(10, 10, 'SCORE: ', {fontSize: '3rem', fontFamily: 'Arial'}).setStroke('#ff0000', 4);
 
     }
     update() {

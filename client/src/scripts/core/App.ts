@@ -10,6 +10,7 @@ import { Controller } from '../scenes/Controller'
 import { HUD } from '../scenes/HUD'
 import { Main } from '../scenes/Main'
 import { Preload } from '../scenes/Preload'
+import { Menu } from '../scenes/Menu'
 import { Map } from './Map'
 import { UI } from './UI'
 
@@ -75,6 +76,7 @@ export default class Application {
       this.scene = [ 
         new Boot, 
         new Preload, 
+        new Menu,
         new Main, 
         new HUD,
         new Controller 
@@ -109,11 +111,10 @@ export default class Application {
    
         this.groups = {
             playerGroup : scene.physics.add.group({ runChildUpdate: true }),
-            doorGroup: scene.physics.add.group({ runChildUpdate: true })
             //...
         }
 
-        scene.add.sprite(scene.cameras.main.width / 2, scene.cameras.main.height / 2, 'dojo');//this.map = new Map(scene);
+        scene.add.sprite(scene.cameras.main.width / 2, scene.cameras.main.height / 2 + 10, 'dojo').setScale(5); //this.map = new Map(scene);
 
         this.hud = scene.scene.run('HUD', scene);
 

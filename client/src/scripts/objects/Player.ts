@@ -1,37 +1,33 @@
 
-import { playerAnims } from '../animations/player';
+
 import { System } from '../core/Config';
 
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
 
   private controls: any
+  private _scene: Phaser.Scene
 
-  constructor(scene: Phaser.Scene, x: number, y: number, flipX: boolean, anim: string) 
+
+  constructor(scene: Phaser.Scene, x: number, y: number) 
   {
-    super(scene, x, y, 'player')
 
-    scene.add.existing(this)
-    scene.physics.add.existing(this)
+    super(scene, x, y, 'nage');
+
+    this._scene = scene;
+
+    scene.add.existing(this);
+    scene.physics.add.existing(this);
 
     System.config.groups.playerGroup.add(this)
 
-  //anims
-
-    playerAnims(scene);
-
-    this
-    .play(anim, true)
-    .setCollideWorldBounds(true)
-    .setSize(20, 10)
-    .setOffset(5, 40)
-    .setFlipX(flipX)
-
+    this.setScale(5).setOffset(5, 40).setTexture('aikidoka', 'fr05');
 
   //init player controller
 
     scene.scene.run('Controller');
-    this.controls = scene.scene.get('Controller');
+    this.controls = scene.scene.get('Controller'); 
+
 
   //run update
 
@@ -40,7 +36,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         if (!this.active)
           return;
 
-        this.update();
+        this.update();       
+
  
     })
 
@@ -58,14 +55,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         const getAnim = async ()=> {
           switch (this.anims.currentAnim.key)
           {
-            case 'sv_walkFront': 
-              return 'sv_idleFront';
-            case 'sv_walkBack':
-              return 'sv_idleBack';
-            case 'sv_walkRight':
-              return 'sv_idleRight';
-            case 'sv_walkLeft':
-              return 'sv_idleLeft';
+            case 'walk front': 
+              return 'fr10';
+            case 'walk back':
+              return 'fr18';
+            case 'walk side':
+              return 'fr00';
           }
         }
 
@@ -87,27 +82,28 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     //walk anims
     
         if (this.body.velocity.y > 0)
-          this.anims.play('sv_walkFront', true);
+          this.play('walk front', true);
     
         if (this.body.velocity.y < 0)
-          this.anims.play('sv_walkBack', true);
+          this.play('walk back', true);
 
         if (this.body.velocity.y === 0 && this.body.velocity.x < 0)
-          this.anims.play('sv_walkLeft', true)
+          this.setFlipX(true).play('walk side', true)
           
         if (this.body.velocity.y === 0 && this.body.velocity.x > 0)
-          this.anims.play('sv_walkRight', true)
+          this.setFlipX(false).play('walk side', true);  
       
     //listen for state change, movement
 
-        if (this.controls.inputs.states.left)
-            this.setVelocityX(-50)
-        if (this.controls.inputs.states.right)
-            this.setVelocityX(50)
-        if (this.controls.inputs.states.up)
-            this.setVelocityY(-50)
-        if (this.controls.inputs.states.down)
-            this.setVelocityY(50)
+        if (this.controls.inputs.states.left && this.x > 600)
+            this.setVelocityX(-270)
+        if (this.controls.inputs.states.right && this.x < 1000)
+            this.setVelocityX(270)
+      //  if (this.controls.inputs.states.up && this.y < this._scene.cameras.main.worldView.bottom)
+       //     this./* setScale(this.scaleX += 0.01, this.scaleY += 0.01). */setVelocityY(-70);
+      //  if (this.controls.inputs.states.down && this.y > this._scene.cameras.main.worldView.top)
+       //     this./* setScale(this.scaleX -= 0.01, this.scaleY -= 0.01). */setVelocityY(70);
+
 
     //set to idle
 

@@ -1,14 +1,14 @@
 {
-  "short_name": "TFAOSV",
-  "name": "The Funky Adventures Of Swanky Velvet",
+  "short_name": "Randori!",
+  "name": "Randori!",
   "icons": [
     {
-      "src": "./icons/sv.png",
+      "src": "./icons/logo.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "./icons/sv.png",
+      "src": "./icons/logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }

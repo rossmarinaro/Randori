@@ -2,7 +2,16 @@
 {
     "image": [
         { "dojo": "assets/dojo.png" },
-        { "logo": "assets/logo.png" }
+        { "logo": "assets/logo.png" },
+        { "uke": "assets/uke.png" },
+        { "nage": "assets/nage.png" }
+    ],
+    "audio": [
+        { "shakuhachi": "assets/shakuhachi.ogg"}
+    ],
+    "atlas": [
+        { "aikidoka": [ "assets/nage.png", "assets/aikidoka.json"]}
+
     ]
-  
+      
 }

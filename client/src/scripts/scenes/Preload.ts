@@ -1,5 +1,5 @@
 import { parseResources } from '../core/parser';
-//import playerAnims from '../animations/player';
+import { anims } from '../animations/main';
 
 export class Preload extends Phaser.Scene {
   constructor() {
@@ -21,13 +21,11 @@ export class Preload extends Phaser.Scene {
 
   private create(scene: Phaser.Scene): void 
   {
-  //   "atlas": [
-  //     { "aikidoka": [ "", "assets/aikidoka.json" ] }
-  // ]
 
-    //playerAnims(this);
 
-    this.scene.run('Main', scene)
+    anims(this);
+
+    this.scene.run('Menu', scene)
     this.scene.stop('Preload');
     
     /**
