@@ -23,21 +23,21 @@ export function anims(scene: Phaser.Scene): void
             frameRate: 8, repeat: -1
         });
         scene.anims.create({
-            key: `${key} attack side`,
+            key: `${key} kokyu side`,
             frames:  scene.anims.generateFrameNames(key, { prefix: 'fr', start: 26, end: 28, zeroPad: 2 }),
-            frameRate: 8, repeat: -1
+            frameRate: 8, repeat: 1, yoyo: true
         });
     
         scene.anims.create({
-            key: `${key} attack front`,
+            key: `${key} kokyu front`,
             frames:  scene.anims.generateFrameNames(key, { prefix: 'fr', start: 29, end: 31, zeroPad: 2 }),
-            frameRate: 8, repeat: -1
+            frameRate: 8, repeat: 1, yoyo: true
         });
         
         scene.anims.create({
-            key: `${key} attack back`,
+            key: `${key} kokyu back`,
             frames:  scene.anims.generateFrameNames(key, { prefix: 'fr', start: 32, end: 34, zeroPad: 2 }),
-            frameRate: 8, repeat: -1
+            frameRate: 8, repeat: 1, yoyo: true
         });
     });
 

@@ -1,4 +1,6 @@
 
+import * as types from '../../../typings/config'
+
 //--------------------------------------- base sys namespace
 
 export namespace System {
@@ -22,7 +24,7 @@ export namespace System {
         public width: number
         public height: number
 
-        public setup: { key: string }
+        public setup: types.setup
         public min = {
             width: 0,
             height: 0
@@ -79,9 +81,17 @@ export namespace System {
             this.key = '';
             this.utils = null;
             this.mode = null;
-            this.setup = {key: ''}
+            this.setup = {
+                key: '',
+                physics: {
+                    arcade: {
+                        gravity: { y: 0 }, //// arcade physics bodies wont budge
+                        useTicker: true,
+                        debug: true 
+                    }
+                }
+            }
 
-    
             if ( Config.mobileAndTabletCheck() )
             {
                 this.inputType = 'touch';

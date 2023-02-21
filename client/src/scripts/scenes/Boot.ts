@@ -22,14 +22,8 @@ export class Boot extends Phaser.Scene {
 
          //call full screen if available
 
-            this.input.on('pointerup', () => {
-                
-                if (!this.scale.isFullscreen && this.scale.fullscreen.available)
-                {   
-                    this.scale.fullscreenTarget = document.getElementById(System.Process.app.parent);    
-                    this.scale.startFullscreen();
-                }
-            });
+            this.input.keyboard.on('keyup', () => this.initFullscreen());
+            this.input.on('pointerup', () => this.initFullscreen());
              
         }
 
@@ -60,6 +54,15 @@ export class Boot extends Phaser.Scene {
         
 
             });
+        }
+
+        private initFullscreen(): void
+        {
+            if (!this.scale.isFullscreen && this.scale.fullscreen.available)
+            {   
+                this.scale.fullscreenTarget = document.getElementById(System.Process.app.parent);    
+                this.scale.startFullscreen();
+            }
         }
     }
 

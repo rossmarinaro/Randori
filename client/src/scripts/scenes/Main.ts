@@ -6,6 +6,7 @@ export class Main extends Phaser.Scene {
 
   private currentStage: string = ''
   private player: any
+  private entities: Phaser.Physics.Arcade.Group
 
 
   constructor() {
@@ -16,9 +17,11 @@ export class Main extends Phaser.Scene {
   async create(scene: Phaser.Scene): Promise<void>
   {
 
-    const background = this.add.sprite(this.cameras.main.width / 2, this.cameras.main.height / 2, 'dojo')/* .setScale(5) */; //this.map = new Map(scene);
+    const background = this.add.sprite(this.cameras.main.width / 2, this.cameras.main.height / 2, 'dojo'); 
 
     System.Process.app.hud = scene.scene.run('HUD', scene);
+
+    this.entities = this.physics.add.group();
 
     this.player = new System.Process.app.player(this, this.scale.width / 2, this.scale.height / 2, 'nage', true);
 
@@ -26,12 +29,38 @@ export class Main extends Phaser.Scene {
 
     this.cameras.main.setZoom(5);
 
+    this.physics.add.overlap(this.player, this.entities, (a, b) => {
+      if (this.player.currentState === 'kokyu' && this.player.attacking === false/*  && this.player.defend */)
+      {
+        System.Process.app.audio.play(this, 'huh', 0.5);
+        System.Process.app.audio.play(this, 'ring', 0.5);
+        this.scene.get('HUD')['score']++;
+      }
+      //else
+        //this.endGame();
+    });
 
+    document.addEventListener('fullscreenchange', () => { 
+
+        this.children.each(i => {
+          if (i instanceof Phaser.GameObjects.Sprite)
+          {
+                     
+            i.setY(this.cameras.main.height / 2);
+
+            if (i !== background)
+              i.setScale(1);
+            
+          }
+        });
+     });
   }
 
-  public update(): void 
+  private endGame(): void
   {
-
+    System.Process.app.audio.play(this, 'error', 0.5);
+    this.scene.launch('GameOver');
+    this.scene.stop('Main');
   }
 
 

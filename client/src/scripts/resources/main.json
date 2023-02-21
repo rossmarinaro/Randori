@@ -5,6 +5,10 @@
         { "logo": "assets/logo.png" }
     ],
     "audio": [
+        { "huh": "assets/huh.ogg"},
+        { "ring": "assets/ring.ogg"},
+        { "error": "assets/error.ogg"},
+        { "hiyah1": "assets/hiyah1.ogg"},
         { "shakuhachi1": "assets/shakuhachi1.ogg"},
         { "shakuhachi2": "assets/shakuhachi2.ogg"}
     ],

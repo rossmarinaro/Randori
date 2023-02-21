@@ -31,7 +31,7 @@ export class Menu extends Phaser.Scene {
 
   private startGame(): void
   {
-    System.Process.app.audio.play(this, 'shakuhachi1');
+    System.Process.app.audio.play(this, 'shakuhachi2');
     this.scene.run('Main', this);
     this.scene.stop('Menu');
   }

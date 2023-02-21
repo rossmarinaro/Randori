@@ -1,18 +1,22 @@
 
 import { System } from '../core/Config'; 
 import { Inputs } from '../core/inputs';
+import { Aikidoka } from '../objects/Aikidoka';
 
 export class Controller extends Phaser.Scene {
 
   public inputs: Inputs;
 
-    constructor()
-    {
+    constructor() {
       super('Controller');
-      this.inputs = new Inputs(this);
     }
 
-    create(): void
+    private init(target: Aikidoka): void
+    {
+      this.inputs = new Inputs(target);
+    }
+
+    private create(): void
     {
       System.Config.mobileAndTabletCheck() ?  
         this.inputs.virtualControls(this) : this.inputs.keyboardControls(this);

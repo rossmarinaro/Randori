@@ -12,6 +12,7 @@ import { Main } from '../scenes/Main'
 import { AudioManager } from './Audio'
 import { Preload } from '../scenes/Preload'
 import { Menu } from '../scenes/Menu'
+import { GameOver } from '../scenes/GameOver'
 import { Map } from './Map'
 import { UI } from './UI'
 
@@ -81,7 +82,8 @@ export default class Application {
         new Menu,
         new Main, 
         new HUD,
-        new Controller 
+        new Controller,
+        new GameOver
       ];
 
       this.ui = new UI;

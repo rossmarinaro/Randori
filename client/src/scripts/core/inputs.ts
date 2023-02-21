@@ -1,16 +1,18 @@
 import { joystick } from '../../../typings/config';
-
+import { Aikidoka } from '../objects/Aikidoka';
+import { System } from './Config';
 
 //scene.input.keyboard.clearCaptures()
 
 export class Inputs {
 
-    private target: Phaser.Physics.Arcade.Sprite;
+    private target: Aikidoka;
+    private refresh: Object
     private actionInputs: string[];
     private directionalInputs: string[];
     private optionInputs: string[];
     privatebuttons: object;
-    private refresh: object;
+    private buttonDown: boolean 
 
     //private gamePads: Navigator;
 
@@ -59,9 +61,12 @@ export class Inputs {
                 return key;
     }
 
-    constructor(scene: Phaser.Scene)
+    constructor(target: Aikidoka)
     {
-        this.ee = scene.events;
+
+        this.target = target;
+
+        this.buttonDown = false;
 
         this.joystick = {
             A: { self: null }
@@ -129,10 +134,10 @@ export class Inputs {
     public _applyButton (scene: Phaser.Scene, button: string, tint: number): void
     {
 
-    ////change tint fill if virtual controls enabled
-        //if (this.buttons !== null)
-            //this.buttons[button].setFillStyle(tint, 1);
+        if (this.buttonDown)
+            return;
 
+        this.buttonDown = true;
 
     ////cancel walk if using item
 
@@ -140,14 +145,14 @@ export class Inputs {
             for (let i in this.directionalInputs)
             {
                 this.states[this.directionalInputs[i]] = false;
-                //this.target._setState('idle', scene);
+
             }
 
     //// button type
 
         switch (button)
         {
-            case 'start': this.states.start = true; break;
+            case 'start': this.target._setState('kokyu'); break;
             case 'select': this.states.select = true; break;
             case 'enter': this.states.enter = true; break;
             case 'left': this.states.left = true; break;
@@ -174,7 +179,8 @@ export class Inputs {
 
     public _releaseButton (button: string): void
     {
-        //this.buttons[button].setFillStyle(0x464646, 0.6);
+
+        this.buttonDown = false;
 
         if (this.directionalInputs.includes(button))
             this.states[button] = false;
@@ -209,9 +215,9 @@ export class Inputs {
         });
         this.buttons.A = scene.add.circle(scene.scale.width - 80, 500, 20, 0x000000).setAlpha(0.5)
             .setInteractive()
-        //   .on('pointerdown', ()=> this.shoot = true)
-        //   .on('pointerup', ()=> this.shoot = false)
-        //   .on('pointerout', ()=> this.shoot = false);
+          .on('pointerdown', ()=> this.target._setState('kokyu'))
+          .on('pointerup', ()=> this.states.start = false)
+          .on('pointerout', ()=> this.states.start = false);
         this.buttons.B = scene.add.circle(scene.scale.width - 100, 550, 20, 0x000000).setAlpha(0.5)
             .setInteractive()
         //   .on('pointerdown', ()=> this.zoom = true)
@@ -251,89 +257,138 @@ export class Inputs {
     {
 
         //start
-            scene.input.keyboard.on('keydown-SPACE', ()=> this._applyButton(scene, 'start', 0), false).on('keyup-SPACE', ()=> this._releaseButton('start'), false);
-            /* if (System.Process.gameState === true)
-            { */
-            //select
-                scene.input.keyboard.on('keydown-SHIFT', ()=> this._applyButton(scene, 'select', 0), false).on('keyup-SHIFT', ()=> this._releaseButton('select'), false);
-            //up
-                scene.input.keyboard.on('keydown-UP', ()=> this._applyButton(scene, 'up', 0), false).on('keyup-UP', ()=> this._releaseButton('up'), false);
-            //down
-                scene.input.keyboard.on('keydown-DOWN', ()=> this._applyButton(scene, 'down', 0), false).on('keyup-DOWN', ()=> this._releaseButton('down'), false);
-            //left
-                scene.input.keyboard.on('keydown-LEFT', ()=> this._applyButton(scene, 'left', 0), false).on('keyup-LEFT', ()=> this._releaseButton('left'), false);
-            //right
-                scene.input.keyboard.on('keydown-RIGHT', ()=> this._applyButton(scene, 'right', 0), false).on('keyup-RIGHT', ()=> this._releaseButton('right'), false);
-        //////////wasd
-            //s A
-                scene.input.keyboard.on('keydown-S', ()=> this._applyButton(scene, 'A', 0), false).on('keyup-S', ()=> this._releaseButton('A'), false);
-            //d B
-                scene.input.keyboard.on('keydown-D', ()=> this._applyButton(scene, 'B', 0), false).on('keyup-D', ()=> this._releaseButton('B'), false);
-            //w  C
-                scene.input.keyboard.on('keydown-W', ()=> this._applyButton(scene, 'C', 0), false).on('keyup-W', ()=> this._releaseButton('C'), false);
-            //a D
-                scene.input.keyboard.on('keydown-A', ()=> this._applyButton(scene, 'D', 0), false).on('keyup-A', ()=> this._releaseButton('D'), false);
-            //enter CHAT
-                scene.input.keyboard.on('keydown-ENTER', ()=> this._applyButton(scene, 'enter', 0), false);
-            //}
+            scene.input.keyboard.on('keydown-SPACE', (e)=> this._applyButton(scene, 'start', 0), false).on('keyup-SPACE', ()=> this._releaseButton('start'), false);
+        //select
+            scene.input.keyboard.on('keydown-SHIFT', ()=> this._applyButton(scene, 'select', 0), false).on('keyup-SHIFT', ()=> this._releaseButton('select'), false);
+        //up
+            scene.input.keyboard.on('keydown-UP', ()=> this._applyButton(scene, 'up', 0), false).on('keyup-UP', ()=> this._releaseButton('up'), false);
+        //down
+            scene.input.keyboard.on('keydown-DOWN', ()=> this._applyButton(scene, 'down', 0), false).on('keyup-DOWN', ()=> this._releaseButton('down'), false);
+        //left
+            scene.input.keyboard.on('keydown-LEFT', ()=> this._applyButton(scene, 'left', 0), false).on('keyup-LEFT', ()=> this._releaseButton('left'), false);
+        //right
+            scene.input.keyboard.on('keydown-RIGHT', ()=> this._applyButton(scene, 'right', 0), false).on('keyup-RIGHT', ()=> this._releaseButton('right'), false);
+    //////////wasd
+        //s A
+            scene.input.keyboard.on('keydown-S', ()=> this._applyButton(scene, 'A', 0), false).on('keyup-S', ()=> this._releaseButton('A'), false);
+        //d B
+            scene.input.keyboard.on('keydown-D', ()=> this._applyButton(scene, 'B', 0), false).on('keyup-D', ()=> this._releaseButton('B'), false);
+        //w  C
+            scene.input.keyboard.on('keydown-W', ()=> this._applyButton(scene, 'C', 0), false).on('keyup-W', ()=> this._releaseButton('C'), false);
+        //a D
+            scene.input.keyboard.on('keydown-A', ()=> this._applyButton(scene, 'D', 0), false).on('keyup-A', ()=> this._releaseButton('D'), false);
+        //enter CHAT
+            scene.input.keyboard.on('keydown-ENTER', ()=> this._applyButton(scene, 'enter', 0), false);
+
         }
-    /******    gamepad     ******////////////////////////////////////////////////////////////////////////////////////////////////////
-        /******                        ****/
-        //// haptic actuator if gamepad is connected
+        //-----------------------------------------------------------------------------------
 
         public gamepadControls(scene: Phaser.Scene): void
         {
-            scene.input.gamepad.on('down', (pad, button, e) => {
-                //console.log(pad.buttons)
-                //console.log(this.gamePads[0], 'event: ', e);
-                //if (this.gamePads[0] !== undefined && this.gamePads[0] !== null) this.gamePads[0].vibrationActuator.playEffect("dual-rumble", {startDelay: 0, duration: 20, weakMagnitude: 0.5, strongMagnitude: 0.5});
-
-                //start button
-                    // switch(button.index)
-                    // {
-                    //     case 8 : ()=> this._applyButton(scene, 'start', null); break;
-                    // }
-                    // if (pad.start) alert('start')
-                    // if (pad.left/* pad.buttons[0] || pad.buttons[6]|| pad.buttons[7] */)
-                    //     this._applyButton(scene, 'left', null)
-                    // if (pad.right)
-                    //     this._applyButton(scene, 'right', null)
-                    // if (pad.up)
-                    //     this._applyButton(scene, 'up', null)
-                    // if (pad.down)
-                    //     this._applyButton(scene, 'down', null)
-                    // if (pad.A)
-                    //     this._applyButton(scene, 'A', null)
-                    // if (pad.B)
-                    //     this._applyButton(scene, 'B', null)
-                    // if (pad.Y)
-                    //     this._applyButton(scene, 'C', null)
-                    // if (pad.X)
-                    //     this._applyButton(scene, 'D', null);
+            scene.input.gamepad.on('down', (pad: any, button: any, e: number): void => {
+  
+              //if (this.gamePads[0] !== undefined && this.gamePads[0] !== null) this.gamePads[0].vibrationActuator.playEffect("dual-rumble", {startDelay: 0, duration: 20, weakMagnitude: 0.5, strongMagnitude: 0.5});  
+              
+              if (System.Process.app.game.gameState === true && System.Process.app.game.cutScene === false)
+              {
+                  if (button.index === 9) 
+                      this._applyButton(scene, 'start', 0);
+                  if (button.index === 8) 
+                      this._applyButton(scene, 'select', 0);
+                  if (pad.left) 
+                      this._applyButton(scene, 'left', 0);
+                  if (pad.right) 
+                      this._applyButton(scene, 'right', 0);
+                  if (pad.up || pad.L2) 
+                      this._applyButton(scene, 'up', 0);
+                  if (pad.down || pad.L1) 
+                      this._applyButton(scene, 'down', 0);
+  
+                  if (System.Process.app.input.mode === 'A')
+                  {
+                      if (pad.A || pad.R1) 
+                          this._applyButton(scene, 'A', 0);
+                      if (pad.B || pad.R2) 
+                          this._applyButton(scene, 'B', 0);
+                      if (pad.Y) 
+                          this._applyButton(scene, 'C', 0);
+                      if (pad.X) 
+                          this._applyButton(scene, 'D', 0);
+                  }
+                  else
+                  {
+                      if (pad.B || pad.R1) 
+                          this._applyButton(scene, 'A', 0);
+                      if (pad.A || pad.R2) 
+                          this._applyButton(scene, 'B', 0);
+                      if (pad.X) 
+                          this._applyButton(scene, 'C', 0);
+                      if (pad.Y) 
+                          this._applyButton(scene, 'D', 0);
+                  }
+              }
             })
-            /////up
-            .on('up', (pad, button, e) => { //console.log('pad up', pad, button)
-
-                // // switch(button.index)
-                // // {
-                // //     case 8 : ()=> this._releaseButton(scene, 'start'); break;
-                // // }
-                // if (pad.left)
-                //     this._releaseButton(scene, 'left')
-                // if (pad.right)
-                //     this._releaseButton(scene, 'right')
-                // if (pad.up)
-                //     this._releaseButton(scene, 'up')
-                // if (pad.down)
-                //     this._releaseButton(scene, 'down')
-                // if (pad.A)
-                //     this._releaseButton(scene, 'A')
-                // if (pad.B)
-                //     this._releaseButton(scene, 'B')
-                // if (pad.Y)
-                //     this._releaseButton(scene, 'C')
-                // if (pad.X)
-                //     this._releaseButton(scene, 'D');
+            .on('up', (pad: any, button: any, e: number): void => { 
+  
+            //   this._releaseButton(scene, 'start');
+            //   this._releaseButton(scene, 'select');
+            //   this._releaseButton(scene, 'left');
+            //   this._releaseButton(scene, 'right');
+            //   this._releaseButton(scene, 'up');
+            //   this._releaseButton(scene, 'down');
+            //   this._releaseButton(scene, 'A');
+            //   this._releaseButton(scene, 'B');
+            //   this._releaseButton(scene, 'C');
+            //   this._releaseButton(scene, 'D');
             });
-        }
+        } 
+
+        //--------------------------------------------------
+
+
+        // private resizeWindow(scene: Phaser.Scene ): void 
+        // {
+    
+        //   if (!scene.scene.settings.active)
+        //       return;
+    
+        //   if (System.Process.app.input.type === 'touch')
+        //   {
+        //     setTimeout(()=> {
+              
+        //       if (System.Config.isPortrait(scene)) 
+        //       {
+        //         this.buttonA?.setPosition(40, 500);
+        //         this.buttonB?.setPosition(100, 550);
+        //         this.buttonC?.setPosition(this.scene.scale.width - 100, 550);
+        //         this.buttonD?.setPosition(this.scene.scale.width - 50, 510);
+        //         this.buttonE?.setPosition(this.scene.scale.width - 50, 590);
+        //         this.buttonF?.setPosition(this.scene.scale.width - 150, 590);
+        //         this.buttonG?.setPosition(40, 590);
+        //         this.joystickBase1?.setPosition(100, 450);
+        //         this.joystickThumb1?.setPosition(100, 450);
+        //         this.joystick1?.setPosition(100, 450); 
+        //         this.joystickBase2?.setPosition(this.scene.scale.width - 50, 450);
+        //         this.joystickThumb2?.setPosition(this.scene.scale.width - 100, 450);
+        //         this.joystick2?.setPosition(this.scene.scale.width - 100, 450);
+        //       }
+        //       else
+        //       {
+        //         this.joystickBase1?.setPosition(100, innerHeight / 2);
+        //         this.joystickThumb1?.setPosition(100, innerHeight / 2);
+        //         this.joystick1?.setPosition(100, innerHeight / 2); 
+        //         this.joystickBase2?.setPosition(this.scene.scale.width - 50, innerHeight / 2);
+        //         this.joystickThumb2?.setPosition(this.scene.scale.width - 100, innerHeight / 2);
+        //         this.joystick2?.setPosition(this.scene.scale.width - 100, innerHeight / 2);
+        //         this.buttonA?.setPosition(40, this.joystick1.y + 100);
+        //         this.buttonB?.setPosition(100, this.joystick1.y + 100);
+        //         this.buttonC?.setPosition(this.scene.scale.width - 100, this.joystick1.y + 100);
+        //         this.buttonD?.setPosition(this.scene.scale.width - 50, this.joystick1.y + 60);
+        //         this.buttonE?.setPosition(this.scene.scale.width - 50, this.joystick1.y + 140);
+        //         this.buttonF?.setPosition(this.scene.scale.width - 150, this.joystick1.y + 140);
+        //         this.buttonG?.setPosition(70, this.joystick1.y + 140);
+        //       }
+        //     }, 1000);
+        //   }
+        // }
     }

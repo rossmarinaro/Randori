@@ -41,9 +41,10 @@ export type physics = {
 export type setup = {
     key: string,
     physics: {
-    matter: { 
-            gravity: {y: number},
-            debug: boolean
+        arcade: {
+            gravity: { y: number }, //// arcade physics bodies wont budge
+            useTicker: boolean,
+            debug: boolean  
         }
     }
 } 
