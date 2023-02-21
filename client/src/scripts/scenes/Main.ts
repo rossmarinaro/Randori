@@ -17,6 +17,8 @@ export class Main extends Phaser.Scene {
   async create(scene: Phaser.Scene): Promise<void>
   {
 
+    System.Process.app.audio.play(this, 'shakuhachi2');
+
     const background = this.add.sprite(this.cameras.main.width / 2, this.cameras.main.height / 2, 'dojo'); 
 
     System.Process.app.hud = scene.scene.run('HUD', scene);
@@ -29,32 +31,39 @@ export class Main extends Phaser.Scene {
 
     this.cameras.main.setZoom(5);
 
+    //collisions
+
     this.physics.add.overlap(this.player, this.entities, (a, b) => {
-      if (this.player.currentState === 'kokyu' && this.player.attacking === false/*  && this.player.defend */)
+
+      if (this.player.currentState === 'kokyu' && this.player.attacking === false)
       {
         System.Process.app.audio.play(this, 'huh', 0.5);
         System.Process.app.audio.play(this, 'ring', 0.5);
         this.scene.get('HUD')['score']++;
       }
-      //else
-        //this.endGame();
+      else if (this.physics.world.overlap(this.player, b['hitbox']))
+        this.endGame();
     });
+
+
+    //camera update
 
     document.addEventListener('fullscreenchange', () => { 
 
-        this.children.each(i => {
-          if (i instanceof Phaser.GameObjects.Sprite)
-          {
-                     
-            i.setY(this.cameras.main.height / 2);
+      this.children.each(i => {
+        if (i instanceof Phaser.GameObjects.Sprite)
+        {
+          i.setY(this.cameras.main.height / 2);
 
-            if (i !== background)
-              i.setScale(1);
-            
-          }
-        });
-     });
+          if (i !== background)
+            i.setScale(1);
+          
+        }
+      });
+    });
   }
+
+  //---------------- init game over
 
   private endGame(): void
   {

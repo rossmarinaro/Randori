@@ -15,6 +15,7 @@ export class GameOver extends Phaser.Scene {
 
     this.cameras.main.setBackgroundColor(0x000000);
 
+    System.Process.app.audio.play(this, 'shakuhachi1');
 
     this.add.text(600, 300, 'GAME OVER', {fontSize: '5rem', fontFamily: 'Arial'});
     const playAgain = this.add.text(730, 500, 'play again?', {fontSize: '2rem', fontFamily: 'Courier'});
@@ -28,7 +29,7 @@ export class GameOver extends Phaser.Scene {
 
   private startGame(): void
   {
-    System.Process.app.audio.play(this, 'shakuhachi1');
+
     this.scene.run('Main', this);
     this.scene.stop('GameOver');
   }

@@ -9,8 +9,8 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   private facing: string = ''
   private currentState: string | undefined
 
+  public hitbox: Phaser.GameObjects.Rectangle
   public attacking: boolean = false
-  public defend: boolean = false;
 
   constructor(scene: Phaser.Scene, x: number, y: number, key: string, isPlayer: boolean) 
   {
@@ -31,9 +31,13 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
     {
       scene.scene.run('Controller', this);
       this.controls = scene.scene.get('Controller'); 
+      this.setSize(20, 20);
     }
     else
-      scene['entities'].add(this);
+    {
+      scene['entities'].add(this); 
+      this.hitbox = scene.add.rectangle(0, 0, 5, 30); scene.physics.world.enable(this.hitbox);
+    }
 
   //run update
 
@@ -80,7 +84,6 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
 
         case 'kokyu':
 
-          this.defend = true;
           {
             const dir = await this.getDir();
             this.anims.play(`${this.key} kokyu ${dir}`);
@@ -163,43 +166,45 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
       else 
       { 
 
-        if (this.y !== this._scene['player'].y)
-          this._scene.physics.moveToObject(this, this._scene['player'], 50); 
+
+        this._scene.physics.moveToObject(this, this._scene['player'], 5); 
+
+        this.hitbox.setPosition(this.x, this.y);
 
         switch(this._scene['player'].facing)
         {
 
           case 'side':
-           // this.x -= 3;
-            this.setFlipX(true).play(
-             // this.controls.inputs.states.down ? `${this.key} walk front` : 
-               // this.controls.inputs.states.up ? 
-                 /*  `${this.key} walk back` : */ `${this.key} walk side`, true
-                );
 
-                // this.x += 3;
-                // this.facing = 'side';
-                // this.setFlipX(false).play(
-                //   //this.controls.inputs.states.down ? `${this.key} walk front` : 
-                //    // this.controls.inputs.states.up ? 
-                //       /* `${this.key} walk back` : */ `${this.key} walk side`, true
-                //     );
+            this.setFlipX(this._scene['player'].x > this.x ? false : true).play(
+            this._scene['player'].controls.inputs.states.down ? `${this.key} walk front` : 
+            this._scene['player'].controls.inputs.states.up ? 
+              `${this.key} walk back` : `${this.key} walk side`, true
+            );
 
           break;
 
           case 'back':
   
-            this.y -= 4;
-            this.setScale(this.scaleX -= 0.03, this.scaleY -= 0.03).play(`${this.key} walk back`, true);
-          
+            if (this.y > this._scene.scale.height / 2 - 30)
+            {
+              this.y -= 0.5;
+              this.setScale(this.scaleX -= 0.003, this.scaleY -= 0.003).play(`${this.key} walk back`, true);
+            }
+
           break;
 
           case 'front':
-
-            this.y += 4;
-            this.setScale(this.scaleX += 0.03, this.scaleY += 0.03).play(`${this.key} walk front`, true);
+            
+            if (this.y < this._scene.cameras.main.worldView.bottom - 30)
+            {
+              this.y += 0.5;
+              this.setScale(this.scaleX += 0.003, this.scaleY += 0.003).play(`${this.key} walk front`, true);
+            }
           
           break;
+          default: 
+            this.play(`${this.key} walk side`, true);
         }
 
       }

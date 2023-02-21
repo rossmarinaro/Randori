@@ -87,7 +87,7 @@ export namespace System {
                     arcade: {
                         gravity: { y: 0 }, //// arcade physics bodies wont budge
                         useTicker: true,
-                        debug: true 
+                        debug: false 
                     }
                 }
             }
