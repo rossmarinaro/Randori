@@ -85,7 +85,7 @@ export namespace System {
                 key: '',
                 physics: {
                     arcade: {
-                        gravity: { y: 0 }, //// arcade physics bodies wont budge
+                        gravity: { y: 0 }, // arcade physics bodies wont budge
                         useTicker: true,
                         debug: false 
                     }
@@ -96,7 +96,7 @@ export namespace System {
             {
                 this.inputType = 'touch';
                 this.mode = Phaser.Scale.RESIZE;
-                this.position = Phaser.Scale.NO_CENTER;
+                this.position = Phaser.Scale.NO_CENTER;   
                 this.width = innerWidth;
                 this.height = innerHeight;
                 this.min.width = 240;
