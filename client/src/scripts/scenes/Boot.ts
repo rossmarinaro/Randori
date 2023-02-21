@@ -56,6 +56,8 @@ export class Boot extends Phaser.Scene {
             });
         }
 
+    //------------------------------ init full screen
+
         private initFullscreen(): void
         {
             if (!this.scale.isFullscreen && this.scale.fullscreen.available)

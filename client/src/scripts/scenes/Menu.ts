@@ -13,9 +13,13 @@ export class Menu extends Phaser.Scene {
 
     this.data = scene.data;
 
-    this.cameras.main.fadeIn(3000).setBackgroundColor(0x000000).centerOn(this.scale.width / 2, this.scale.height / 2);
+    this.cameras.main
+    .fadeIn(3000)
+    .setBackgroundColor(0x000000)
+    .centerOn(this.scale.width / 2, this.scale.height / 2)
+    .setZoom(System.Config.mobileAndTabletCheck() ? 0.5 : 1);
 
-    const logo = this.add.sprite(this.scale.width / 2, this.scale.height / 2 - 50, 'logo').setScale(5);
+    const logo = this.add.sprite(this.scale.width / 2, this.scale.height / 2 - 100, 'logo').setScale(5);
 
     this.time.delayedCall(3000, () => {
         

@@ -12,6 +12,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   public hitbox: Phaser.GameObjects.Rectangle
   public attacking: boolean = false
 
+
   constructor(scene: Phaser.Scene, x: number, y: number, key: string, isPlayer: boolean) 
   {
 
@@ -38,6 +39,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
       scene['entities'].add(this); 
       this.hitbox = scene.add.rectangle(0, 0, 5, 30); scene.physics.world.enable(this.hitbox);
     }
+
 
   //run update
 

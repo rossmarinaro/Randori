@@ -29,7 +29,7 @@ export class Main extends Phaser.Scene {
 
     new System.Process.app.player(this, this.scale.width / 2 + 50, this.scale.height / 2, 'uke', false).setFlipX(true);
 
-    this.cameras.main.setZoom(5);
+    this.cameras.main.setZoom(System.Config.isLandscape(this) && System.Config.mobileAndTabletCheck() ? 3 : 5);
 
     //collisions
 
@@ -37,6 +37,14 @@ export class Main extends Phaser.Scene {
 
       if (this.player.currentState === 'kokyu' && this.player.attacking === false)
       {
+        b['setTintFill'](0x000000);
+        this.time.delayedCall(100, ()=> {
+          b['clearTint']();
+          this.time.delayedCall(100, ()=> {
+            b['setTintFill'](0x000000);
+            this.time.delayedCall(100, ()=> b['clearTint']());
+          });
+        });
         System.Process.app.audio.play(this, 'huh', 0.5);
         System.Process.app.audio.play(this, 'ring', 0.5);
         this.scene.get('HUD')['score']++;
@@ -49,10 +57,13 @@ export class Main extends Phaser.Scene {
     //camera update
 
     document.addEventListener('fullscreenchange', () => { 
+      
 
       this.children.each(i => {
+
         if (i instanceof Phaser.GameObjects.Sprite)
         {
+
           i.setY(this.cameras.main.height / 2);
 
           if (i !== background)
