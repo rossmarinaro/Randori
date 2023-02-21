@@ -39,7 +39,7 @@ export class GameOver extends Phaser.Scene {
   {
 
     this.scene.run('Main', this);
-    this.scene.stop('Menu');
+    this.scene.stop('GameOver');
   }
 
 
