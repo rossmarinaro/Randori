@@ -2,11 +2,9 @@
 import { System } from '../core/Config';
 
 import resources_main from '../resources/main.json';
-
 import JoyStickPlugin from '../../../plugins/joystick.js';
-import { GameData } from '../core/data';
 
-//import Utils from '../system/Utils.js';
+import Utils from '../core/Utils.js';
 
 
 export class Boot extends Phaser.Scene {
@@ -17,13 +15,25 @@ export class Boot extends Phaser.Scene {
         
     //---------------------- initialize 
 
-        async init() 
+        async init(): Promise<void>
         {
             
-            this.data = await System.config.refreshApp(); 
+            this.data = await System.Process.app.refreshApp(); 
+
+         //call full screen if available
+
+            this.input.on('pointerup', () => {
+                
+                if (!this.scale.isFullscreen && this.scale.fullscreen.available)
+                {   
+                    this.scale.fullscreenTarget = document.getElementById(System.Process.app.parent);    
+                    this.scale.startFullscreen();
+                }
+            });
              
         }
-        async preload()
+
+        async preload(): Promise<void>
         {
             // assets
 
@@ -36,16 +46,18 @@ export class Boot extends Phaser.Scene {
         
     //------------------------------- run preload scene
 
-       async create()
-        {   
+       async create(): Promise<void>
+       {   
+
             this.add.text(0, 0, '', {fontSize: "1px", fontFamily: "Bangers"}).setAlpha(0);
             this.add.text(0, 0, '', {fontSize: "1px", fontFamily: "Digitizer"}).setAlpha(0);
+
             this.time.delayedCall(500, ()=> {
 
             //gameplay data object (gets passed scene to scene)
             
                 this.scene.run('Preload', this.data);
-                this.scene.stop('Boot');
+        
 
             });
         }

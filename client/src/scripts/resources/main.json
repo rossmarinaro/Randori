@@ -2,15 +2,15 @@
 {
     "image": [
         { "dojo": "assets/dojo.png" },
-        { "logo": "assets/logo.png" },
-        { "uke": "assets/uke.png" },
-        { "nage": "assets/nage.png" }
+        { "logo": "assets/logo.png" }
     ],
     "audio": [
-        { "shakuhachi": "assets/shakuhachi.ogg"}
+        { "shakuhachi1": "assets/shakuhachi1.ogg"},
+        { "shakuhachi2": "assets/shakuhachi2.ogg"}
     ],
     "atlas": [
-        { "aikidoka": [ "assets/nage.png", "assets/aikidoka.json"]}
+        { "nage": [ "assets/nage.png", "assets/json/aikidoka.json"]},
+        { "uke": [ "assets/uke.png", "assets/json/aikidoka.json"]}
 
     ]
       

@@ -15,7 +15,7 @@ export class UI {
    
         const _resize = (scene: Phaser.Scene, key: string) => {
             scene.scene.settings.visible = false;   //disable scene visibility / call resize method
-            System.config.ui.resize(scene, key);
+            System.Process.app.ui.resize(scene, key);
             if (callback !== null)
                 callback(scene);
         },
@@ -50,8 +50,8 @@ export class UI {
         {
             case 'Preload': 
             return[
-                !System.isDesktop(scene) && System.isLandscape(scene) ? 1400 : scene.cameras.main.width,
-                !System.isDesktop(scene) && System.isLandscape(scene) ? 1800 : scene.cameras.main.height
+                !System.Config.isDesktop(scene) && System.Config.isLandscape(scene) ? 1400 : scene.cameras.main.width,
+                !System.Config.isDesktop(scene) && System.Config.isLandscape(scene) ? 1800 : scene.cameras.main.height
             ];
             case 'Controller':
                 return[scene.cameras.main.width, scene.cameras.main.height]; 
@@ -59,12 +59,12 @@ export class UI {
                 return [450, 800];
             case 'HUD':
                 return[
-                    !System.isDesktop(scene) && System.isLandscape(scene) ? 1400 : 740,
-                    !System.isDesktop(scene) && System.isLandscape(scene) ? 1800 : 960
+                    !System.Config.isDesktop(scene) && System.Config.isLandscape(scene) ? 1400 : 740,
+                    !System.Config.isDesktop(scene) && System.Config.isLandscape(scene) ? 1800 : 960
                 ];
             case 'PauseMenu':
-                if (!System.isDesktop(scene))
-                    return System.isLandscape(scene) ? [1700, 1200] : [800, 1200];
+                if (!System.Config.isDesktop(scene))
+                    return System.Config.isLandscape(scene) ? [1700, 1200] : [800, 1200];
                 else 
                     return [2200, 980];
         }
@@ -80,37 +80,37 @@ export class UI {
             case 'Controller': case 'Mini': 
                 return[scene.cameras.main.width / 2, scene.cameras.main.height / 2, false];
             case 'Preload': 
-                if (System.isDesktop(scene))
+                if (System.Config.isDesktop(scene))
                     return[scene.cameras.main.width / 2, scene.cameras.main.height / 3.5, false];
                 else
                     return[
-                        System.isLandscape(scene) ? 180 : scene.cameras.main.width / 2, 
-                        System.isLandscape(scene) ? scene.cameras.main.height / 2 : scene.cameras.main.height / 3.5, 
+                        System.Config.isLandscape(scene) ? 180 : scene.cameras.main.width / 2, 
+                        System.Config.isLandscape(scene) ? scene.cameras.main.height / 2 : scene.cameras.main.height / 3.5, 
                         false
                     ];
             case 'Modal': 
                     return[
-                        System.isDesktop(scene) ? 200 : scene.cameras.main.width / 2, 
-                        System.isDesktop(scene) ? scene.cameras.main.height / 2 : scene.cameras.main.height / 2.5, 
+                        System.Config.isDesktop(scene) ? 200 : scene.cameras.main.width / 2, 
+                        System.Config.isDesktop(scene) ? scene.cameras.main.height / 2 : scene.cameras.main.height / 2.5, 
                         false
                     ];
             case 'HUD':
                 return[
-                    !System.isDesktop(scene) && System.isLandscape(scene) ? 
+                    !System.Config.isDesktop(scene) && System.Config.isLandscape(scene) ? 
                     scene.cameras.main.width / 3.5 : scene.cameras.main.width / 2, scene.cameras.main.height / 2,
                     false
                 ];
             case 'PauseMenu':
-                if (System.isLandscape(scene))
+                if (System.Config.isLandscape(scene))
                     return[
-                        !System.isDesktop(scene) ? 420 : 30, 
-                        !System.isDesktop(scene) ? 650 : scene.cameras.main.height / 2.4, 
-                        !System.isDesktop(scene) ? false : true
+                        !System.Config.isDesktop(scene) ? 420 : 30, 
+                        !System.Config.isDesktop(scene) ? 650 : scene.cameras.main.height / 2.4, 
+                        !System.Config.isDesktop(scene) ? false : true
                     ];
                 else                 
                     return[
                         scene.cameras.main.width / 2, 
-                        !System.isDesktop(scene) ? scene.cameras.main.height / 2.5 : scene.cameras.main.height / 2, 
+                        !System.Config.isDesktop(scene) ? scene.cameras.main.height / 2.5 : scene.cameras.main.height / 2, 
                         false
                     ];
             default:
@@ -125,11 +125,11 @@ export class UI {
     {
         if (pos === true)
         {
-            let posX = System.isDesktop(scene) ? 40 : scene.cameras.main.height > 400 ? 140 : scene.cameras.main.width / 2 - 150;
+            let posX = System.Config.isDesktop(scene) ? 40 : scene.cameras.main.height > 400 ? 140 : scene.cameras.main.width / 2 - 150;
 
             scene.cameras.main.setPosition(posX, screenTop /* - 150 */)  
 
-            if (!System.isDesktop(scene))
+            if (!System.Config.isDesktop(scene))
                 scene.cameras.main.setZoom(
                     Math.min(
                         this.sizer.width / scene.cameras.main.width, 

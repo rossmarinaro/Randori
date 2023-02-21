@@ -4,8 +4,8 @@ export class Menu extends Phaser.Scene {
 
 
   constructor() {
-    System.setup.key = 'Menu';
-    super(System.setup);
+    System.Process.setup.key = 'Menu';
+    super(System.Process.setup);
   }
 
   async create(scene: Phaser.Scene): Promise<void> 
@@ -19,11 +19,11 @@ export class Menu extends Phaser.Scene {
 
     this.time.delayedCall(3000, () => {
         
-        const start = this.add.text(logo.x - 170, logo.y + 200, 'START GAME', {fontSize: '3rem', fontFamily: 'Arial'}).setInteractive();
+        const start = this.add.text(logo.x - 170, logo.y + 200, 'START GAME', {fontSize: '3rem', fontFamily: 'Arial'});
         this.time.delayedCall(500, () => {
             this.tweens.add({targets: start, alpha: 0, duration: 1500, ease: 'Sine.easeOut', repeat: -1, yoyo: true});
             this.input.keyboard.once('keydown', ()=> this.startGame());
-            start.once('pointerdown', ()=> this.startGame());
+            this.input.once('pointerdown', ()=> this.startGame());
         });
     });
 
@@ -31,6 +31,7 @@ export class Menu extends Phaser.Scene {
 
   private startGame(): void
   {
+    System.Process.app.audio.play(this, 'shakuhachi1');
     this.scene.run('Main', this);
     this.scene.stop('Menu');
   }

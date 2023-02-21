@@ -14,23 +14,23 @@ export class Controller extends Phaser.Scene {
 
     create(): void
     {
-      System.mobileAndTabletCheck() ?  
+      System.Config.mobileAndTabletCheck() ?  
         this.inputs.virtualControls(this) : this.inputs.keyboardControls(this);
 
-      System.config.ui.listen(this, 'Controller', this.resizeWindow);
+      System.Process.app.ui.listen(this, 'Controller', this.resizeWindow);
 
     }
 
     public resizeWindow(scene: any)
     {
 
-      if (!scene.scene.settings.active || System.config.input.virtual === false)
+      if (!scene.scene.settings.active || System.Process.app.input.virtual === false)
         return;
 
-      if (System.config.input.type === 'touch'/*  && scene.isVisible === true */)
+      if (System.Process.app.input.type === 'touch'/*  && scene.isVisible === true */)
       {
         setTimeout(()=>{
-          if (System.config.input.type === 'touch'/*  && scene.isVisible === true */)
+          if (System.Process.app.input.type === 'touch'/*  && scene.isVisible === true */)
           {
     
             if (scene.inputs.buttons.A !== null)
@@ -38,7 +38,7 @@ export class Controller extends Phaser.Scene {
             if (scene.inputs.buttons.B !== null)
               scene.inputs.buttons.B.setPosition((90 / 100) * scene.cameras.main.width, scene.cameras.main.height / 2 + 80);
             if (scene.inputs.joystick.A !== null)
-              scene.inputs.joystick.A.self.setPosition(100, System.isPortrait(scene) ? 450 : 200);
+              scene.inputs.joystick.A.self.setPosition(100, System.Config.isPortrait(scene) ? 450 : 200);
           }
         }, 200);
 

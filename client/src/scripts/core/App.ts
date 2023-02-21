@@ -2,13 +2,14 @@ import 'phaser'
 
 import { input, physics, scale, setup } from '../../../typings/config'
 
-import { System, Config } from './Config'
+import { System } from './Config'
 import { GameData } from './data'
-import { Player } from '../objects/Player'
+import { Aikidoka } from '../objects/Aikidoka'
 import { Boot } from '../scenes/Boot'
 import { Controller } from '../scenes/Controller'
 import { HUD } from '../scenes/HUD'
 import { Main } from '../scenes/Main'
+import { AudioManager } from './Audio'
 import { Preload } from '../scenes/Preload'
 import { Menu } from '../scenes/Menu'
 import { Map } from './Map'
@@ -18,12 +19,13 @@ import { UI } from './UI'
 
 export default class Application {
   
-  public player: typeof Player
+  public player: typeof Aikidoka
   public map: Map
   public ui: UI
+  public audio: typeof AudioManager = AudioManager
   public gameData: GameData
   private hud: Phaser.Scenes.ScenePlugin
-  private system: Config
+  private system: System.Config
   private type: number
   private transparent: boolean
   private parent: string
@@ -38,7 +40,7 @@ export default class Application {
 
   public scale: scale
   
-  constructor(system: Config)
+  constructor(system: System.Config)
   {  
 
       this.type = Phaser.AUTO;
@@ -83,47 +85,28 @@ export default class Application {
       ];
 
       this.ui = new UI;
-      this.player = Player;
+      this.player = Aikidoka;
   }
 
 
 //--------------------------------------------- reinit variables
 
-  public async refreshApp()
-  { 
-
-      // System.config.events.socket = null;
-      // System.config.multiPlayer.username = null;
-      // System.config.multiPlayer.isPlaying = false;
-  
-      // System.config.ui = new UI(); 
-       System.config.gameData = new GameData();
-      // System.config.gameData.player.color = 'red';
-      // //console.log('data reset: ', System.config.gameData);
-
-      return System.config.gameData;
-  }
-
-//------------------------------------    INIT LEVEL, groups, base game utils, called every main scene
-
-    public async init(scene: Phaser.Scene/* , playerArgs, spawnEnemies, spawnPickups */): Promise<any>
+    public async refreshApp(): Promise<Phaser.Data.DataManager>
     { 
-   
-        this.groups = {
-            playerGroup : scene.physics.add.group({ runChildUpdate: true }),
-            //...
-        }
 
-        scene.add.sprite(scene.cameras.main.width / 2, scene.cameras.main.height / 2 + 10, 'dojo').setScale(5); //this.map = new Map(scene);
-
-        this.hud = scene.scene.run('HUD', scene);
-
+        System.Process.app.gameData = new GameData();
+        return System.Process.app.gameData;
     }
+
+
 }
 
+
+//-------------------------------------- init app
+
 window.addEventListener('load', () => {
-    System.config = new Application(System); 
-    System.game = new Phaser.Game(System.config);   
+    System.Process.app = new Application(System.Process); 
+    System.Process.game = new Phaser.Game(System.Process.app);   
 });
 
 

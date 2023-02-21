@@ -252,7 +252,7 @@ export class Inputs {
 
         //start
             scene.input.keyboard.on('keydown-SPACE', ()=> this._applyButton(scene, 'start', 0), false).on('keyup-SPACE', ()=> this._releaseButton('start'), false);
-            /* if (System.config.gameState === true)
+            /* if (System.Process.gameState === true)
             { */
             //select
                 scene.input.keyboard.on('keydown-SHIFT', ()=> this._applyButton(scene, 'select', 0), false).on('keyup-SHIFT', ()=> this._releaseButton('select'), false);

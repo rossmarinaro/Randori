@@ -4,34 +4,36 @@ import { playerSpawns } from '../spawns/player'
 
 export class Main extends Phaser.Scene {
 
-  private currentStage: string = '';
+  private currentStage: string = ''
+  private player: any
+
 
   constructor() {
-    System.setup.key = 'Main';
-    super(System.setup);
+    System.Process.setup.key = 'Main';
+    super(System.Process.setup);
   }
 
-  async create(scene: Phaser.Scene) 
+  async create(scene: Phaser.Scene): Promise<void>
   {
 
-   // this.data = scene.scene['data'];
-    await System.config.init(this);
+    const background = this.add.sprite(this.cameras.main.width / 2, this.cameras.main.height / 2, 'dojo')/* .setScale(5) */; //this.map = new Map(scene);
 
-    
-    // const spawn: any = await playerSpawns(this);
-    // const spawnX = spawn[0],
-    //       spawnY = spawn[1],
-    //       flipX = spawn[2],
-    //       anim = spawn[3];
+    System.Process.app.hud = scene.scene.run('HUD', scene);
 
-     const player = new System.config.player(this, this.scale.width / 2, this.scale.height / 2);
+    this.player = new System.Process.app.player(this, this.scale.width / 2, this.scale.height / 2, 'nage', true);
 
+    new System.Process.app.player(this, this.scale.width / 2 + 50, this.scale.height / 2, 'uke', false).setFlipX(true);
 
-    this.cameras.main.centerOn(this.scale.width / 2, this.scale.height / 2);
-
+    this.cameras.main.setZoom(5);
 
 
   }
+
+  public update(): void 
+  {
+
+  }
+
 
 
 }
