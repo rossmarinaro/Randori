@@ -36,7 +36,7 @@ export class Menu extends Phaser.Scene {
   private startGame(): void
   {
 
-    this.scene.run('Main', this);
+    this.scene.run('Game', this);
     this.scene.stop('Menu');
   }
 

@@ -6,11 +6,13 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   private _scene: Phaser.Scene
   private key: string
   private isPlayer: boolean
-  private facing: string = ''
+  private isRolling: boolean = false
+  private facing: string = 'side'
   private currentState: string | undefined
 
   public hitbox: Phaser.GameObjects.Rectangle
   public attacking: boolean = false
+  public rollUke: Function
 
 
   constructor(scene: Phaser.Scene, x: number, y: number, key: string, isPlayer: boolean) 
@@ -32,12 +34,20 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
     {
       scene.scene.run('Controller', this);
       this.controls = scene.scene.get('Controller'); 
-      this.setSize(20, 20);
+      this.setSize(30, 20).setFrame('fr05');
     }
-    else
+
+    //uke
+
+    else 
     {
-      scene['entities'].add(this); 
-      this.hitbox = scene.add.rectangle(0, 0, 5, 30); scene.physics.world.enable(this.hitbox);
+      scene['entities'].push(this); 
+      this.hitbox = scene.add.rectangle(0, 0, 5, 20); scene.physics.world.enable(this.hitbox);
+
+      //roll player proxy function
+
+      this.rollUke = () => this._setState('roll'); 
+
     }
 
 
@@ -53,9 +63,6 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   public async _setState(state: string | undefined): Promise<void>
   {
 
-    if (!this.anims.currentAnim)
-      return;
-
     this.currentState = state;
 
     switch(this.currentState)
@@ -63,21 +70,10 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         case 'idle':
         
         {
-          const getFrame = async ()=> {
+          this.isRolling = false;
 
-            switch (this.anims.currentAnim.key)
-            {
-              case `${this.key} walk front`: 
-                return 'fr10';
-              case `${this.key} walk back`:
-                return 'fr18';
-              case `${this.key} walk side`:
-                return 'fr00';
-            }
-          }
-  
-          const frame = await getFrame();
-  
+          const frame = await this.getFrame();
+
           if (frame)
             this.setFrame(frame).stop();
         }
@@ -87,10 +83,28 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         case 'kokyu':
 
           {
+            this.isRolling = false;
+
             const dir = await this.getDir();
-            this.anims.play(`${this.key} kokyu ${dir}`);
+            this.anims.play(`${this.key} kokyu ${dir}`, true);
             System.Process.app.audio.play(this._scene, 'hiyah1', 0.5);
           }
+
+        break;
+
+        case 'roll':
+
+          this.isRolling = true;      
+          this._scene.physics.world.disable(this.hitbox);
+
+          this._scene.time.delayedCall(700, () => {
+            this.isRolling = false;
+            this._scene.physics.world.enable(this.hitbox);
+          });
+
+          this._scene.physics.moveToObject(this, this._scene['player'], 125); 
+          this.play(`${this.key} roll`, true);
+
         break;
       }
   }
@@ -101,7 +115,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   public async update()
   { 
 
-      if (!this.active)
+      if (!this.active || this.isRolling === true)
         return;
 
         
@@ -163,7 +177,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
  
       }
 
-    //------------------AI
+    //------------------ enemy AI
       
       else 
       { 
@@ -205,8 +219,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
             }
           
           break;
-          default: 
-            this.play(`${this.key} walk side`, true);
+
         }
 
       }
@@ -218,6 +231,27 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         // this._setState(this.controls.inputs.state);
     
   }
+
+  //----------------------------
+
+  private async getFrame ()
+  {
+
+    if (!this.anims.currentAnim)
+      return;
+
+    switch (this.anims.currentAnim.key)
+    {
+      case `${this.key} walk front`: 
+        return 'fr15';
+      case `${this.key} walk back`:
+        return 'fr23';
+      case `${this.key} walk side`: case `${this.key} roll`: 
+        return 'fr05';
+    }
+  }
+
+  //---------------------------
 
   private async getDir()
   {

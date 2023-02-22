@@ -18,9 +18,9 @@ export class GameOver extends Phaser.Scene {
     .fadeIn(3000)
     .setBackgroundColor(0x000000)
     .centerOn(this.scale.width / 2, this.scale.height / 2)
-    .setZoom(System.Config.isLandscape(this) && System.Config.mobileAndTabletCheck() ? 0.5 : 1);
+    .setZoom(System.Config.mobileAndTabletCheck() ? 0.5 : 1);
 
-
+    System.Process.app.data.currentLevel = 1;
     System.Process.app.audio.play(this, 'shakuhachi1');
 
     this.add.text(this.scale.width / 2 - 220, this.scale.height / 2 - 100, 'GAME OVER', {fontSize: '5rem', fontFamily: 'Arial'});
@@ -38,7 +38,7 @@ export class GameOver extends Phaser.Scene {
   private startGame(): void
   {
 
-    this.scene.run('Main', this);
+    this.scene.run('Game', this);
     this.scene.stop('GameOver');
   }
 

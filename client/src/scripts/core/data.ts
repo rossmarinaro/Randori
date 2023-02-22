@@ -1,12 +1,12 @@
 /* GAME DATA */
-/* import * as types from '../../../typings/types' */
+
 
 
 //--------------------------- 
 
 export class GameData {
 
-    public currentStage: string = 'Bar';
-    public spawnPoint: string = 'start';
+    public static currentLevel: number = 1
+    public static score: number = 0
 
 }

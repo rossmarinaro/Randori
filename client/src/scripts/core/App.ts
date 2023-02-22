@@ -8,12 +8,11 @@ import { Aikidoka } from '../objects/Aikidoka'
 import { Boot } from '../scenes/Boot'
 import { Controller } from '../scenes/Controller'
 import { HUD } from '../scenes/HUD'
-import { Main } from '../scenes/Main'
+import { Game } from '../scenes/Game'
 import { AudioManager } from './Audio'
 import { Preload } from '../scenes/Preload'
 import { Menu } from '../scenes/Menu'
 import { GameOver } from '../scenes/GameOver'
-import { Map } from './Map'
 import { UI } from './UI'
 
 
@@ -21,10 +20,10 @@ import { UI } from './UI'
 export default class Application {
   
   public player: typeof Aikidoka
-  public map: Map
-  public ui: UI
   public audio: typeof AudioManager = AudioManager
-  public gameData: GameData
+  public data: typeof GameData = GameData
+  public ui: UI
+
   private hud: Phaser.Scenes.ScenePlugin
   private system: System.Config
   private type: number
@@ -80,7 +79,7 @@ export default class Application {
         new Boot, 
         new Preload, 
         new Menu,
-        new Main, 
+        new Game, 
         new HUD,
         new Controller,
         new GameOver
@@ -96,7 +95,7 @@ export default class Application {
     public async refreshApp(): Promise<Phaser.Data.DataManager>
     { 
 
-        System.Process.app.gameData = new GameData();
+        System.Process.app.gameData = new GameData;
         return System.Process.app.gameData;
     }
 
