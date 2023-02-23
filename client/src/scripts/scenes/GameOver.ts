@@ -21,6 +21,7 @@ export class GameOver extends Phaser.Scene {
     .setZoom(System.Config.mobileAndTabletCheck() ? 0.5 : 1);
 
     System.Process.app.data.currentLevel = 1;
+    System.Process.app.data.score = 0;
     System.Process.app.audio.play(this, 'shakuhachi1');
 
     this.add.text(this.scale.width / 2 - 220, this.scale.height / 2 - 100, 'GAME OVER', {fontSize: '5rem', fontFamily: 'Arial'});

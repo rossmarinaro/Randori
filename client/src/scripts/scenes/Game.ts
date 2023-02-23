@@ -1,11 +1,10 @@
 import { System } from '../core/Config';
 import { Aikidoka } from '../objects/Aikidoka';
-import { playerSpawns } from '../spawns/player'
 
 
 export class Game extends Phaser.Scene {
 
-  private currentStage: string = ''
+  private timeLeft: number
   private player: any
   private entities: Aikidoka[] = []
 
@@ -14,8 +13,12 @@ export class Game extends Phaser.Scene {
     super(System.Process.setup);
   }
 
-  async create(scene: Phaser.Scene): Promise<void>
+  async create(): Promise<void>
   {
+
+    let gameOver = false;
+
+    this.timeLeft = 20;
 
     this.cameras.main.setZoom(System.Config.isLandscape(this) && System.Config.mobileAndTabletCheck() ? 3 : 5);
 
@@ -23,7 +26,7 @@ export class Game extends Phaser.Scene {
 
     const background = this.add.sprite(this.cameras.main.width / 2, this.cameras.main.height / 2, 'dojo'); 
 
-    System.Process.app.hud = scene.scene.run('HUD', scene);
+    System.Process.app.hud = this.scene.run('HUD', this);
 
     this.player = new System.Process.app.player(this, this.scale.width / 2 - 50, this.scale.height / 2, 'nage', true);
 
@@ -31,26 +34,39 @@ export class Game extends Phaser.Scene {
   
     //collisions
 
-    this.physics.add.overlap(this.player, this.entities, (nage, uke) => {
+    this.physics.add.overlap(this.player, this.entities, (nage, uke): void => { 
 
-      if (this.player.currentState === 'kokyu' && this.player.attacking === false)
+      if (this.player.state === 'kokyu')
       {
 
-        uke['rollUke']();
+        this.entities.forEach(i => {
 
-        System.Process.app.audio.play(this, 'huh', 0.5);
-        System.Process.app.audio.play(this, 'ring', 0.5);
+            if (this.physics.world.overlap(nage, i) && i.hitbox.active)
+            {
+              uke['setUkeState']('roll');
+      
+              System.Process.app.audio.play(this, 'huh', 0.5);
+              System.Process.app.audio.play(this, 'ring', 0.5);
+            }
+        });
+
         System.Process.app.data.score++;
-
-        switch (System.Process.app.data.score)
-        {
-         // case 3: System.Process.app.data.currentLevel++; this.scene.restart(); break;
-        }
-
+      
       }
-      else if (this.physics.world.overlap(this.player, uke['hitbox'])) //game over
+      else 
+      {
+        if (this.physics.world.overlap(this.player, uke['hitbox'])) //game over
+        {
+          if (gameOver)
+            return;
 
-        this.endGame();
+          gameOver = true;
+
+          uke['setUkeState']('kokyu');
+          this.time.delayedCall(500, ()=> this.endGame());
+        }
+      }
+
     });
 
 
@@ -70,8 +86,25 @@ export class Game extends Phaser.Scene {
             i.setScale(1);
           
         }
+
       });
+
     });
+
+  }
+
+
+  //--------------update 
+
+  public update(): void
+  {
+    if (this.timeLeft > 0.01) 
+      this.timeLeft -= 0.02;
+    else
+    {
+      System.Process.app.data.currentLevel++;
+      this.scene.restart();
+    }
   }
 
 

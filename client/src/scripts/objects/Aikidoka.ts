@@ -6,13 +6,11 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   private _scene: Phaser.Scene
   private key: string
   private isPlayer: boolean
-  private isRolling: boolean = false
   private facing: string = 'side'
-  private currentState: string | undefined
+  private moveY: number = 0.1
 
   public hitbox: Phaser.GameObjects.Rectangle
-  public attacking: boolean = false
-  public rollUke: Function
+  public setUkeState: Function
 
 
   constructor(scene: Phaser.Scene, x: number, y: number, key: string, isPlayer: boolean) 
@@ -41,12 +39,15 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
 
     else 
     {
+
       scene['entities'].push(this); 
       this.hitbox = scene.add.rectangle(0, 0, 5, 20); scene.physics.world.enable(this.hitbox);
 
+      System.Process.app.data.ukeSpeed = System.Process.app.data.currentLevel * 5;
+
       //roll player proxy function
 
-      this.rollUke = () => this._setState('roll'); 
+      this.setUkeState = (state: string) => this.applyState(state); 
 
     }
 
@@ -60,18 +61,14 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
 
   //----------------------------- set players state, attacks, etc
 
-  public async _setState(state: string | undefined): Promise<void>
+  public async applyState(state: string | undefined): Promise<void>
   {
 
-    this.currentState = state;
-
-    switch(this.currentState)
+    switch(state)
     {
         case 'idle':
         
         {
-          this.isRolling = false;
-
           const frame = await this.getFrame();
 
           if (frame)
@@ -83,8 +80,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         case 'kokyu':
 
           {
-            this.isRolling = false;
-
+            this.setState('kokyu');
             const dir = await this.getDir();
             this.anims.play(`${this.key} kokyu ${dir}`, true);
             System.Process.app.audio.play(this._scene, 'hiyah1', 0.5);
@@ -93,17 +89,19 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         break;
 
         case 'roll':
-
-          this.isRolling = true;      
+     
+          this.setState('roll');
+          this.hitbox.active = false;
           this._scene.physics.world.disable(this.hitbox);
 
           this._scene.time.delayedCall(700, () => {
-            this.isRolling = false;
+            this.setState('');
+            this.hitbox.active = true;
             this._scene.physics.world.enable(this.hitbox);
           });
 
           this._scene.physics.moveToObject(this, this._scene['player'], 125); 
-          this.play(`${this.key} roll`, true);
+          this.anims.play(`${this.key} roll`, true);
 
         break;
       }
@@ -115,11 +113,10 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   public async update()
   { 
 
-      if (!this.active || this.isRolling === true)
+      if (!this.active)
         return;
 
-        
-      this.on(Phaser.Animations.Events.ANIMATION_COMPLETE, ()=> this.attacking = false);
+    
 
     //listen for state change, movement
 
@@ -130,7 +127,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         {
           this.x -= 3;
           this.facing = 'side';
-          this.setFlipX(true).play(
+          this.setState('moving').setFlipX(true).play(
             this.controls.inputs.states.down ? `${this.key} walk front` : 
               this.controls.inputs.states.up ? 
                 `${this.key} walk back` : `${this.key} walk side`, true
@@ -141,7 +138,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         {
           this.x += 3;
           this.facing = 'side';
-          this.setFlipX(false).play(
+          this.setState('moving').setFlipX(false).play(
             this.controls.inputs.states.down ? `${this.key} walk front` : 
               this.controls.inputs.states.up ? 
                 `${this.key} walk back` : `${this.key} walk side`, true
@@ -151,15 +148,17 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         if (this.controls.inputs.states.up && this.y > this._scene.scale.height / 2 - 30)
         {
           this.y -= 4;
+          this.moveY -= 0.1;
           this.facing = 'back';
-          this.setScale(this.scaleX -= 0.03, this.scaleY -= 0.03).play(`${this.key} walk back`, true);
+          this.setState('moving').play(`${this.key} walk back`, true);
         }
 
         if (this.controls.inputs.states.down && this.y < this._scene.cameras.main.worldView.bottom - 30)
         {
           this.y += 4;
+          this.moveY += 0.1;
           this.facing = 'front';
-          this.setScale(this.scaleX += 0.03, this.scaleY += 0.03).play(`${this.key} walk front`, true);
+          this.setState('moving').play(`${this.key} walk front`, true);
         }
 
         //set to idle
@@ -169,10 +168,12 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
             !this.controls.inputs.states.left && 
             !this.controls.inputs.states.right && 
             !this.controls.inputs.states.up && 
-            !this.controls.inputs.states.down
+            !this.controls.inputs.states.down &&
+            !this.controls.inputs.states.A &&
+            !this.controls.inputs.states.B 
           ) 
         )
-         this._setState('idle');
+        this.setState('').applyState('idle');
 
  
       }
@@ -182,8 +183,10 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
       else 
       { 
 
+        if (this.state === 'kokyu' || this.state === 'roll')
+          return
 
-        this._scene.physics.moveToObject(this, this._scene['player'], 5); 
+        this._scene.physics.moveToObject(this, this._scene['player'], System.Process.app.data.ukeSpeed); 
 
         this.hitbox.setPosition(this.x, this.y);
 
@@ -192,11 +195,13 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
 
           case 'side':
 
-            this.setFlipX(this._scene['player'].x > this.x ? false : true).play(
-            this._scene['player'].controls.inputs.states.down ? `${this.key} walk front` : 
-            this._scene['player'].controls.inputs.states.up ? 
-              `${this.key} walk back` : `${this.key} walk side`, true
-            );
+            this
+              .setFlipX(this._scene['player'].x > this.x ? false : true)
+              .play(
+                this._scene['player'].controls.inputs.states.down ? `${this.key} walk front` : 
+                this._scene['player'].controls.inputs.states.up ? 
+                  `${this.key} walk back` : `${this.key} walk side`, true
+                );
 
           break;
 
@@ -204,8 +209,12 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   
             if (this.y > this._scene.scale.height / 2 - 30)
             {
-              this.y -= 0.5;
-              this.setScale(this.scaleX -= 0.003, this.scaleY -= 0.003).play(`${this.key} walk back`, true);
+              this.y -= 2;
+              this.moveY -= 0.1;
+              this.play(
+                  this._scene['player'].state !== 'moving' ?
+                  `${this.key} walk side` : `${this.key} walk back`, true
+                  );
             }
 
           break;
@@ -214,21 +223,23 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
             
             if (this.y < this._scene.cameras.main.worldView.bottom - 30)
             {
-              this.y += 0.5;
-              this.setScale(this.scaleX += 0.003, this.scaleY += 0.003).play(`${this.key} walk front`, true);
+              this.y += 2;
+              this.moveY += 0.1;
+              this.play(
+                this._scene['player'].state !== 'moving' ? 
+                `${this.key} walk side` : `${this.key} walk front`, true
+                );
             }
           
           break;
 
-        }
+         }
 
       }
 
-      this.setDepth(this.y);
+    //set depth and scale
 
-
-        //player actions A, B ...
-        // this._setState(this.controls.inputs.state);
+    this.setDepth(this.y).setScale((this.y * 0.002));
     
   }
 

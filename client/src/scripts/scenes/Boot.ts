@@ -43,7 +43,7 @@ export class Boot extends Phaser.Scene {
        async create(): Promise<void>
        {   
 
-            this.add.text(0, 0, '', {fontSize: "1px", fontFamily: "Bangers"}).setAlpha(0);
+
             this.add.text(0, 0, '', {fontSize: "1px", fontFamily: "Digitizer"}).setAlpha(0);
 
             this.time.delayedCall(500, ()=> {

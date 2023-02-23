@@ -152,7 +152,7 @@ export class Inputs {
 
         switch (button)
         {
-            case 'start': this.target._setState('kokyu'); break;
+            case 'start': this.target.applyState('kokyu'); break;
             case 'select': this.states.select = true; break;
             case 'enter': this.states.enter = true; break;
             case 'left': this.states.left = true; break;
@@ -213,16 +213,14 @@ export class Inputs {
             base: this.joystick.A.base,
             thumb: this.joystick.A.thumb
         });
+        
         this.buttons.A = scene.add.circle(scene.scale.width - 80, 500, 20, 0x000000).setAlpha(0.5)
             .setInteractive()
-          .on('pointerdown', ()=> this.target._setState('kokyu'))
-          .on('pointerup', ()=> this.states.start = false)
-          .on('pointerout', ()=> this.states.start = false);
+            .on('pointerdown', ()=> this.target.applyState('kokyu'));
+
         this.buttons.B = scene.add.circle(scene.scale.width - 100, 550, 20, 0x000000).setAlpha(0.5)
             .setInteractive()
-        //   .on('pointerdown', ()=> this.zoom = true)
-        //   .on('pointerup', ()=> this.zoom = false)
-        //   .on('pointerout', ()=> this.zoom = false);
+            .on('pointerdown', ()=> this.target.applyState('kokyu'));
 
         scene.events.on('update', ()=>{
 
