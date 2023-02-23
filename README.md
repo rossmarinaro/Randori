@@ -1,6 +1,6 @@
-# Randori! 乱取り
+# Randori! 乱取り !
 
-** built with phaserjs, webpack, typescript, nodejs**
+** Built with Phaserjs, Webpack, Typescript, Nodejs**
 
 
 ![image info](./randori.png)   
