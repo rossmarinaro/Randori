@@ -7,7 +7,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   private key: string
   private isPlayer: boolean
   private facing: string = 'side'
-  private moveY: number = 0.1
+  private YFactor: number = 0.1
 
   public hitbox: Phaser.GameObjects.Rectangle
   public setUkeState: Function
@@ -147,8 +147,8 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
 
         if (this.controls.inputs.states.up && this.y > this._scene.scale.height / 2 - 30)
         {
-          this.y -= 4;
-          this.moveY -= 0.1;
+          this.y -= 4; 
+          this.YFactor -= 0.005;
           this.facing = 'back';
           this.setState('moving').play(`${this.key} walk back`, true);
         }
@@ -156,7 +156,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         if (this.controls.inputs.states.down && this.y < this._scene.cameras.main.worldView.bottom - 30)
         {
           this.y += 4;
-          this.moveY += 0.1;
+          this.YFactor += 0.005;
           this.facing = 'front';
           this.setState('moving').play(`${this.key} walk front`, true);
         }
@@ -210,7 +210,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
             if (this.y > this._scene.scale.height / 2 - 30)
             {
               this.y -= 2;
-              this.moveY -= 0.1;
+              this.YFactor -= 0.0025;
               this.play(
                   this._scene['player'].state !== 'moving' ?
                   `${this.key} walk side` : `${this.key} walk back`, true
@@ -224,7 +224,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
             if (this.y < this._scene.cameras.main.worldView.bottom - 30)
             {
               this.y += 2;
-              this.moveY += 0.1;
+              this.YFactor += 0.0025;
               this.play(
                 this._scene['player'].state !== 'moving' ? 
                 `${this.key} walk side` : `${this.key} walk front`, true
@@ -239,7 +239,9 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
 
     //set depth and scale
 
-    this.setDepth(this.y).setScale((this.y * 0.002));
+    this
+      .setDepth(this.y)
+      .setScale(((this.y * 0.002) * (this._scene.cameras.main.height / 100)) * this.YFactor);  
     
   }
 

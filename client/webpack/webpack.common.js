@@ -32,7 +32,6 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/assets', to: 'assets' },
-        { from: 'pwa', to: '' },
         { from: 'src/favicon.ico', to: '' }
       ]
     })
