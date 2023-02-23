@@ -24,7 +24,7 @@ export class Boot extends Phaser.Scene {
 
             this.input.keyboard.on('keyup', () => this.initFullscreen());
             this.input.on('pointerup', () => this.initFullscreen());
-             
+            
         }
 
         async preload(): Promise<void>
@@ -51,8 +51,7 @@ export class Boot extends Phaser.Scene {
             //gameplay data object (gets passed scene to scene)
             
                 this.scene.run('Preload', this.data);
-        
-
+    
             });
         }
 

@@ -24,7 +24,7 @@ export class Menu extends Phaser.Scene {
     this.time.delayedCall(3000, () => {
         
         const start = this.add.text(logo.x - 170, logo.y + 200, 'START GAME', {fontSize: '3rem', fontFamily: 'Arial'});
-        
+
         this.time.delayedCall(500, () => {
             this.tweens.add({targets: start, alpha: 0, duration: 1500, ease: 'Sine.easeOut', repeat: -1, yoyo: true});
             this.input.keyboard.once('keydown', ()=> this.startGame());
@@ -32,6 +32,9 @@ export class Menu extends Phaser.Scene {
         });
 
     });
+
+    document.addEventListener('fullscreenchange', () => this.cameras.main.centerOn(this.cameras.main.width / 2, this.cameras.main.height / 2));
+
 
   }
 

@@ -34,6 +34,9 @@ export class GameOver extends Phaser.Scene {
         this.input.once('pointerdown', ()=> this.startGame());
     });
 
+    document.addEventListener('fullscreenchange', () => this.cameras.main.centerOn(this.cameras.main.width / 2, this.cameras.main.height / 2));
+
+
   }
 
   private startGame(): void

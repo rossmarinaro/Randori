@@ -83,9 +83,11 @@ export class Game extends Phaser.Scene {
 
     //camera update / shift objects to fit
 
-    document.addEventListener('fullscreenchange', () => {           
+    document.addEventListener('fullscreenchange', () => {    
+      
+        this.cameras.main.centerOn(this.cameras.main.width / 2, this.cameras.main.height / 2);
   
-        this.background.setY(this.cameras.main.height / 2);
+        this.background.setPosition(this.cameras.main.width / 2, this.cameras.main.height / 2); 
 
         this.player.setScale(0.6).setPosition(this.cameras.main.width / 2 - 40, this.cameras.main.height / 2);
 
@@ -94,7 +96,14 @@ export class Game extends Phaser.Scene {
       //restart scene if exiting fullscreen (a hack, does not affect score or spawn count)
 
         if (!this.scale.isFullscreen)
+        {
+          if (gameOver)
+            return;
+
+           gameOver = true;
+
           this.time.delayedCall(500, () => this.scene.restart());
+        }
     });
 
 
