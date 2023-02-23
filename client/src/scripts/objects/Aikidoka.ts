@@ -1,16 +1,19 @@
 import { System } from '../core/Config'
+import { ukeAI } from '../core/AI'
+
 
 export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
 
   private controls: any
   private _scene: Phaser.Scene
-  private key: string
   private isPlayer: boolean
   private facing: string = 'side'
-  private YFactor: number = 0.1
 
+  public key: string  
+  public YFactor: number = 0.1
   public hitbox: Phaser.GameObjects.Rectangle
   public setUkeState: Function
+  public worldBounds: Phaser.GameObjects.Sprite
 
 
   constructor(scene: Phaser.Scene, x: number, y: number, key: string, isPlayer: boolean) 
@@ -21,6 +24,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
     this._scene = scene;
     this.key = key;
     this.isPlayer = isPlayer;
+    this.worldBounds = this._scene['background'];
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -100,8 +104,12 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
             this._scene.physics.world.enable(this.hitbox);
           });
 
-          this._scene.physics.moveToObject(this, this._scene['player'], 125); 
           this.anims.play(`${this.key} roll`, true);
+
+          if (!this.isPlayer)
+            this._scene.physics.moveToObject(this, this._scene['player'], 125);
+          else 
+            this.flipX ? this.x -= 6 : this.x += 6; 
 
         break;
       }
@@ -153,7 +161,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
           this.setState('moving').play(`${this.key} walk back`, true);
         }
 
-        if (this.controls.inputs.states.down && this.y < this._scene.cameras.main.worldView.bottom - 30)
+        if (this.controls.inputs.states.down && this.y < this.worldBounds.y + this.worldBounds.height - (this.worldBounds.height / 2 + 40))
         {
           this.y += 4;
           this.YFactor += 0.005;
@@ -181,71 +189,39 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
     //------------------ enemy AI
       
       else 
-      { 
+        ukeAI(this._scene, this);
 
-        if (this.state === 'kokyu' || this.state === 'roll')
-          return
 
-        this._scene.physics.moveToObject(this, this._scene['player'], System.Process.app.data.ukeSpeed); 
-
-        this.hitbox.setPosition(this.x, this.y);
-
-        switch(this._scene['player'].facing)
-        {
-
-          case 'side':
-
-            this
-              .setFlipX(this._scene['player'].x > this.x ? false : true)
-              .play(
-                this._scene['player'].controls.inputs.states.down ? `${this.key} walk front` : 
-                this._scene['player'].controls.inputs.states.up ? 
-                  `${this.key} walk back` : `${this.key} walk side`, true
-                );
-
-          break;
-
-          case 'back':
-  
-            if (this.y > this._scene.scale.height / 2 - 30)
-            {
-              this.y -= 2;
-              this.YFactor -= 0.0025;
-              this.play(
-                  this._scene['player'].state !== 'moving' ?
-                  `${this.key} walk side` : `${this.key} walk back`, true
-                  );
-            }
-
-          break;
-
-          case 'front':
-            
-            if (this.y < this._scene.cameras.main.worldView.bottom - 30)
-            {
-              this.y += 2;
-              this.YFactor += 0.0025;
-              this.play(
-                this._scene['player'].state !== 'moving' ? 
-                `${this.key} walk side` : `${this.key} walk front`, true
-                );
-            }
-          
-          break;
-
-         }
-
-      }
 
     //set depth and scale
 
     this
       .setDepth(this.y)
       .setScale(((this.y * 0.002) * (this._scene.cameras.main.height / 100)) * this.YFactor);  
+
+    //prevent y axis from extending beyond floor / reset scale
+
+      if (this.y < this._scene.scale.height / 2 - 35)
+      {
+        this.y = this._scene.scale.height / 2 - 30;
+        this.setScale(0.4);
+      }
+
+      if (this.y === this.worldBounds.y + this.worldBounds.height - (this.worldBounds.height / 2 + 40))
+      {
+        this.setScale(1.35);
+      }
+
+      if (this.scale > 1.35)
+        this.setScale(1.35);
+
+      if (this.scale < 0.4)
+        this.setScale(0.4);
+
     
   }
 
-  //----------------------------
+  //---------------------------- get frame 
 
   private async getFrame ()
   {
@@ -264,7 +240,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  //---------------------------
+  //--------------------------- get direction
 
   private async getDir()
   {
