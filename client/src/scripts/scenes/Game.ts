@@ -138,6 +138,7 @@ export class Game extends Phaser.Scene {
 
   private spawnUke(amount: number): void
   {
+    
     let initialX = 1, 
         initialY = 1;
 

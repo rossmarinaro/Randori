@@ -223,7 +223,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
 
   //---------------------------- get frame 
 
-  private async getFrame ()
+  private async getFrame (): Promise<string | void>
   {
 
     if (!this.anims.currentAnim)
@@ -235,14 +235,16 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         return 'fr15';
       case `${this.key} walk back`:
         return 'fr23';
-      case `${this.key} walk side`: case `${this.key} roll`: 
+      case `${this.key} walk side`: 
+      case `${this.key} roll`: 
+      default:
         return 'fr05';
     }
   }
 
   //--------------------------- get direction
 
-  private async getDir()
+  private async getDir(): Promise<string>
   {
     switch (this.facing)
     {
@@ -250,7 +252,7 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         return 'front';
       case `back`:
         return 'back';
-      case `side`:
+      case `side`: default:
         return 'side';
     }
 
