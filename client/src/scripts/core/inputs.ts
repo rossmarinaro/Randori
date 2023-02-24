@@ -242,8 +242,7 @@ export class Inputs {
                 this._releaseButton('up')
                 this._releaseButton('down')
             }
-                // for (let button in this.directionalInputs)
-                //     this._releaseButton(button);
+
         });
     }
 
@@ -284,9 +283,7 @@ export class Inputs {
         public gamepadControls(scene: Phaser.Scene): void
         {
             scene.input.gamepad.on('down', (pad: any, button: any, e: number): void => {
-  
-              //if (this.gamePads[0] !== undefined && this.gamePads[0] !== null) this.gamePads[0].vibrationActuator.playEffect("dual-rumble", {startDelay: 0, duration: 20, weakMagnitude: 0.5, strongMagnitude: 0.5});  
-              
+                
               if (System.Process.app.game.gameState === true && System.Process.app.game.cutScene === false)
               {
                   if (button.index === 9) 
@@ -328,65 +325,17 @@ export class Inputs {
             })
             .on('up', (pad: any, button: any, e: number): void => { 
   
-            //   this._releaseButton(scene, 'start');
-            //   this._releaseButton(scene, 'select');
-            //   this._releaseButton(scene, 'left');
-            //   this._releaseButton(scene, 'right');
-            //   this._releaseButton(scene, 'up');
-            //   this._releaseButton(scene, 'down');
-            //   this._releaseButton(scene, 'A');
-            //   this._releaseButton(scene, 'B');
-            //   this._releaseButton(scene, 'C');
-            //   this._releaseButton(scene, 'D');
+              this._releaseButton('start');
+              this._releaseButton('select');
+              this._releaseButton('left');
+              this._releaseButton('right');
+              this._releaseButton('up');
+              this._releaseButton('down');
+              this._releaseButton('A');
+              this._releaseButton('B');
+              this._releaseButton('C');
+              this._releaseButton('D');
             });
         } 
 
-        //--------------------------------------------------
-
-
-        // private resizeWindow(scene: Phaser.Scene ): void 
-        // {
-    
-        //   if (!scene.scene.settings.active)
-        //       return;
-    
-        //   if (System.Process.app.input.type === 'touch')
-        //   {
-        //     setTimeout(()=> {
-              
-        //       if (System.Config.isPortrait(scene)) 
-        //       {
-        //         this.buttonA?.setPosition(40, 500);
-        //         this.buttonB?.setPosition(100, 550);
-        //         this.buttonC?.setPosition(this.scene.scale.width - 100, 550);
-        //         this.buttonD?.setPosition(this.scene.scale.width - 50, 510);
-        //         this.buttonE?.setPosition(this.scene.scale.width - 50, 590);
-        //         this.buttonF?.setPosition(this.scene.scale.width - 150, 590);
-        //         this.buttonG?.setPosition(40, 590);
-        //         this.joystickBase1?.setPosition(100, 450);
-        //         this.joystickThumb1?.setPosition(100, 450);
-        //         this.joystick1?.setPosition(100, 450); 
-        //         this.joystickBase2?.setPosition(this.scene.scale.width - 50, 450);
-        //         this.joystickThumb2?.setPosition(this.scene.scale.width - 100, 450);
-        //         this.joystick2?.setPosition(this.scene.scale.width - 100, 450);
-        //       }
-        //       else
-        //       {
-        //         this.joystickBase1?.setPosition(100, innerHeight / 2);
-        //         this.joystickThumb1?.setPosition(100, innerHeight / 2);
-        //         this.joystick1?.setPosition(100, innerHeight / 2); 
-        //         this.joystickBase2?.setPosition(this.scene.scale.width - 50, innerHeight / 2);
-        //         this.joystickThumb2?.setPosition(this.scene.scale.width - 100, innerHeight / 2);
-        //         this.joystick2?.setPosition(this.scene.scale.width - 100, innerHeight / 2);
-        //         this.buttonA?.setPosition(40, this.joystick1.y + 100);
-        //         this.buttonB?.setPosition(100, this.joystick1.y + 100);
-        //         this.buttonC?.setPosition(this.scene.scale.width - 100, this.joystick1.y + 100);
-        //         this.buttonD?.setPosition(this.scene.scale.width - 50, this.joystick1.y + 60);
-        //         this.buttonE?.setPosition(this.scene.scale.width - 50, this.joystick1.y + 140);
-        //         this.buttonF?.setPosition(this.scene.scale.width - 150, this.joystick1.y + 140);
-        //         this.buttonG?.setPosition(70, this.joystick1.y + 140);
-        //       }
-        //     }, 1000);
-        //   }
-        // }
     }
