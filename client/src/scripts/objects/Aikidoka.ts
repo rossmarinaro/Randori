@@ -192,8 +192,19 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
     //set depth and scale
 
     this
-      .setDepth(this.y).setScale(Math.pow(this.y, 0.00002));
-      //this.setScale(Math.exp(Math.log(100) + (Math.log(1000) - Math.log(100) / (100 - 0) * (this.y * 0.000002) - 0)));
+      .setDepth(this.y);
+      
+    if (this.y < this._scene.scale.height / 2 - 20)
+      this.setScale(0.6);
+
+    else if (this.y < this._scene.scale.height / 2 - 10)
+      this.setScale(0.8);
+
+    else if (this.y > this._scene.cameras.main.worldView.bottom - 58)
+      this.setScale(1.3);
+
+    else
+      this.setScale(1);
   }
 
   //---------------------------- get frame 

@@ -74,6 +74,7 @@ export class Game extends Phaser.Scene {
           gameOver = true;
 
           uke['setUkeState']('kokyu');
+
           this.time.delayedCall(500, ()=> this.endGame());
         }
       }
