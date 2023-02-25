@@ -10,7 +10,6 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
   private facing: string = 'side'
 
   public key: string  
-  public YFactor: number = 0.1
   public hitbox: Phaser.GameObjects.Rectangle
   public setUkeState: Function
   public worldBounds: Phaser.GameObjects.Sprite
@@ -156,7 +155,6 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         if (this.controls.inputs.states.up && this.y > this._scene.scale.height / 2 - 30)
         {
           this.y -= 4; 
-          this.YFactor -= 0.005;
           this.facing = 'back';
           this.setState('moving').play(`${this.key} walk back`, true);
         }
@@ -164,7 +162,6 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
         if (this.controls.inputs.states.down && this.y < this.worldBounds.y + this.worldBounds.height - (this.worldBounds.height / 2 + 40))
         {
           this.y += 4;
-          this.YFactor += 0.005;
           this.facing = 'front';
           this.setState('moving').play(`${this.key} walk front`, true);
         }
@@ -176,10 +173,9 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
             !this.controls.inputs.states.left && 
             !this.controls.inputs.states.right && 
             !this.controls.inputs.states.up && 
-            !this.controls.inputs.states.down &&
-            !this.controls.inputs.states.A &&
-            !this.controls.inputs.states.B 
-          ) 
+            !this.controls.inputs.states.down 
+          ) &&             
+          this.state !== 'kokyu' 
         )
         this.setState('').applyState('idle');
 
@@ -196,29 +192,8 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
     //set depth and scale
 
     this
-      .setDepth(this.y)
-      .setScale(((this.y * 0.002) * (this._scene.cameras.main.height / 100)) * this.YFactor);  
-
-    //prevent y axis from extending beyond floor / reset scale
-
-      if (this.y < this._scene.scale.height / 2 - 35)
-      {
-        this.y = this._scene.scale.height / 2 - 30;
-        this.setScale(0.4);
-      }
-
-      if (this.y === this.worldBounds.y + this.worldBounds.height - (this.worldBounds.height / 2 + 40))
-      {
-        this.setScale(1.35);
-      }
-
-      if (this.scale > 1.35)
-        this.setScale(1.35);
-
-      if (this.scale < 0.4)
-        this.setScale(0.4);
-
-    
+      .setDepth(this.y).setScale(Math.pow(this.y, 0.00002));
+      //this.setScale(Math.exp(Math.log(100) + (Math.log(1000) - Math.log(100) / (100 - 0) * (this.y * 0.000002) - 0)));
   }
 
   //---------------------------- get frame 

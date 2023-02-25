@@ -27,7 +27,7 @@ export class Game extends Phaser.Scene {
       zoom = 3;
 
     else if (System.Config.isDesktop(this))
-      zoom = 5;
+      zoom = 6;
 
 
     this.cameras.main.setZoom(zoom);
@@ -118,7 +118,7 @@ export class Game extends Phaser.Scene {
     if (this.timeLeft > 0.01) 
       this.timeLeft -= 0.02;
     else
-    {
+    { 
       System.Process.app.data.currentLevel++;
       this.scene.restart();
     }
@@ -129,7 +129,7 @@ export class Game extends Phaser.Scene {
 
   private endGame(): void
   {
-    System.Process.app.audio.play(this, 'error', 0.5);
+    System.Process.app.audio.play(this, 'error');
     this.scene.launch('GameOver');
     this.scene.stop('Game');
   }

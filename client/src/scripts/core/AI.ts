@@ -33,7 +33,6 @@ export function ukeAI(scene: Phaser.Scene, uke: Aikidoka): void
       if (uke.y > scene.scale.height / 2 - 30)
       {
         uke.y -= 2;
-        uke.YFactor -= 0.0025;
         uke.play(
             scene['player'].state !== 'moving' ?
             `${uke.key} walk side` : `${uke.key} walk back`, true
@@ -47,7 +46,6 @@ export function ukeAI(scene: Phaser.Scene, uke: Aikidoka): void
       if (uke.y < uke.worldBounds.y + uke.worldBounds.height - (uke.worldBounds.height / 2 + 40))
       {
         uke.y += 2;
-        uke.YFactor += 0.0025;
         uke.play(
           scene['player'].state !== 'moving' ? 
           `${uke.key} walk side` : `${uke.key} walk front`, true
