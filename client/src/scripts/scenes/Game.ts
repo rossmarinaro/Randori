@@ -122,6 +122,7 @@ export class Game extends Phaser.Scene {
 
     if (this.timeLeft > 0.01) 
       this.timeLeft -= 0.02;
+
     else
     { 
       System.Process.app.data.currentLevel++;
@@ -151,11 +152,11 @@ export class Game extends Phaser.Scene {
         initialY += Math.random() * 2 + 1;
       }
 
-      let
+      const
           x = this.scale.width / 2 + initialX,
           y = this.scale.height / 2 + initialY;
 
-      new System.Process.app.player(this, x, y, 'uke', false).setFlipX(true)
+      new System.Process.app.player(this, x, y, 'uke', false).setFlipX(true);
     }
   }
 
