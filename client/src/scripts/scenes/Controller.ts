@@ -33,7 +33,9 @@ export class Controller extends Phaser.Scene {
 
       if (System.Process.app.input.type === 'touch'/*  && scene.isVisible === true */)
       {
+        
         setTimeout(()=>{
+
           if (System.Process.app.input.type === 'touch'/*  && scene.isVisible === true */)
           {
     

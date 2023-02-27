@@ -27,7 +27,7 @@ export class Game extends Phaser.Scene {
       zoom = 3;
 
     else if (System.Config.isDesktop(this))
-      zoom = 5;
+      zoom = 6;//5;
 
 
     this.cameras.main.setZoom(zoom);
@@ -35,6 +35,9 @@ export class Game extends Phaser.Scene {
     System.Process.app.audio.play(this, 'shakuhachi2');
 
     this.background = this.add.sprite(this.cameras.main.width / 2, this.cameras.main.height / 2, 'dojo'); 
+
+    if (System.Process.app.data.currentLevel >= 10)  //some experimental weirdness
+      this.background.setTint(Math.random() * 0xff0000);
 
     System.Process.app.hud = this.scene.run('HUD', this);
 
@@ -116,6 +119,7 @@ export class Game extends Phaser.Scene {
 
   public update(): void
   {
+
     if (this.timeLeft > 0.01) 
       this.timeLeft -= 0.02;
     else
@@ -123,16 +127,7 @@ export class Game extends Phaser.Scene {
       System.Process.app.data.currentLevel++;
       this.scene.restart();
     }
-  }
 
-
-  //---------------- game over
-
-  private endGame(): void
-  {
-    System.Process.app.audio.play(this, 'error');
-    this.scene.launch('GameOver');
-    this.scene.stop('Game');
   }
 
   //---------------------- uke spawner
@@ -164,6 +159,15 @@ export class Game extends Phaser.Scene {
     }
   }
 
+
+  //---------------- game over
+
+  private endGame(): void
+  {
+    System.Process.app.audio.play(this, 'error');
+    this.scene.launch('GameOver');
+    this.scene.stop('Game');
+  }
 
 
 }

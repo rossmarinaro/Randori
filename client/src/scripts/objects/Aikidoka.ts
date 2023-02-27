@@ -125,6 +125,13 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
       if (this.isPlayer)
       {
 
+        this.on(Phaser.Animations.Events.ANIMATION_COMPLETE, ()=> { 
+            if (this.state === 'kokyu')
+              this.setState('');
+        }, this._scene);
+
+        //----------------------------- movements
+
         if (this.controls.inputs.states.left && this.x > this._scene.cameras.main.worldView.left + 10)
         {
           this.x -= 3;
