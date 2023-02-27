@@ -71,23 +71,18 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
     {
         case 'idle':
         
-        {
           const frame = await this.getFrame();
-
           if (frame)
             this.setFrame(frame).stop();
-        }
 
         break;
 
         case 'kokyu':
 
-          {
-            this.setState('kokyu');
-            const dir = await this.getDir();
-            this.anims.play(`${this.key} kokyu ${dir}`, true);
-            System.Process.app.audio.play(this._scene, 'hiyah1', 0.5);
-          }
+          this.setState('kokyu');
+          const dir = await this.getDir();
+          this.anims.play(`${this.key} kokyu ${dir}`, true);
+          System.Process.app.audio.play(this._scene, 'hiyah1', 0.5);
 
         break;
 

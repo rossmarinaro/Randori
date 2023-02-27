@@ -27,7 +27,7 @@ export class Game extends Phaser.Scene {
       zoom = 3;
 
     else if (System.Config.isDesktop(this))
-      zoom = 6;
+      zoom = 5;
 
 
     this.cameras.main.setZoom(zoom);
