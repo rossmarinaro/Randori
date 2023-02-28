@@ -2,7 +2,7 @@ import { joystick } from '../../../typings/config';
 import { Aikidoka } from '../objects/Aikidoka';
 import { System } from './Config';
 
-//scene.input.keyboard.clearCaptures()
+
 
 export class Inputs {
 
@@ -131,7 +131,7 @@ export class Inputs {
 
  ////----------------------------------------------------- apply button
 
-    public _applyButton (scene: Phaser.Scene, button: string, tint: number): void
+    public _applyButton (button: string): void
     {
 
         if (this.buttonDown)
@@ -139,16 +139,14 @@ export class Inputs {
 
         this.buttonDown = true;
 
-    ////cancel walk if using item
+    //cancel walk if using item
 
         if (this.actionInputs.includes(button))
             for (let i in this.directionalInputs)
-            {
                 this.states[this.directionalInputs[i]] = false;
 
-            }
 
-    //// button type
+    // button type
 
         switch (button)
         {
@@ -166,7 +164,7 @@ export class Inputs {
             break;
         }
 
-    //// if A, B, C, D: deselect directional inputs
+    // if A, B, C, D: deselect directional inputs
 
         if (this.states.A || this.states.B || this.states.C || this.states.D)
         {
@@ -247,38 +245,37 @@ export class Inputs {
     }
 
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /******    cursors and keys 'WASD'     ******/////
-    /******                                      ****/
+    //-------------------------------------------------- keyboard
+
     public keyboardControls(scene: Phaser.Scene): void
     {
+        scene.input.keyboard.clearCaptures()
+            .on('keydown-SPACE', ()=> this._applyButton('start'), false)
+            .on('keyup-SPACE', ()=> this._releaseButton('start'), false)
+            .on('keydown-SHIFT', ()=> this._applyButton('select'), false)
+            .on('keyup-SHIFT', ()=> this._releaseButton('select'), false)
+            .on('keydown-UP', ()=> this._applyButton('up'), false)
+            .on('keyup-UP', ()=> this._releaseButton('up'), false)
+            .on('keydown-DOWN', ()=> this._applyButton('down'), false)
+            .on('keyup-DOWN', ()=> this._releaseButton('down'), false)
+            .on('keydown-LEFT', ()=> this._applyButton('left'), false)
+            .on('keyup-LEFT', ()=> this._releaseButton('left'), false)
+            .on('keydown-RIGHT', ()=> this._applyButton('right'), false)
+            .on('keyup-RIGHT', ()=> this._releaseButton('right'), false)
+            .on('keydown-S', ()=> this._applyButton('A'), false)
+            .on('keyup-S', ()=> this._releaseButton('A'), false)
+            .on('keydown-D', ()=> this._applyButton('B'), false)
+            .on('keyup-D', ()=> this._releaseButton('B'), false)
+            .on('keydown-W', ()=> this._applyButton('C'), false)
+            .on('keyup-W', ()=> this._releaseButton('C'), false)
+            .on('keydown-A', ()=> this._applyButton('D'), false)
+            .on('keyup-A', ()=> this._releaseButton('D'), false)
+            .on('keydown-ENTER', ()=> this._applyButton('enter'), false);
 
-        //start
-            scene.input.keyboard.on('keydown-SPACE', (e)=> this._applyButton(scene, 'start', 0), false).on('keyup-SPACE', ()=> this._releaseButton('start'), false);
-        //select
-            scene.input.keyboard.on('keydown-SHIFT', ()=> this._applyButton(scene, 'select', 0), false).on('keyup-SHIFT', ()=> this._releaseButton('select'), false);
-        //up
-            scene.input.keyboard.on('keydown-UP', ()=> this._applyButton(scene, 'up', 0), false).on('keyup-UP', ()=> this._releaseButton('up'), false);
-        //down
-            scene.input.keyboard.on('keydown-DOWN', ()=> this._applyButton(scene, 'down', 0), false).on('keyup-DOWN', ()=> this._releaseButton('down'), false);
-        //left
-            scene.input.keyboard.on('keydown-LEFT', ()=> this._applyButton(scene, 'left', 0), false).on('keyup-LEFT', ()=> this._releaseButton('left'), false);
-        //right
-            scene.input.keyboard.on('keydown-RIGHT', ()=> this._applyButton(scene, 'right', 0), false).on('keyup-RIGHT', ()=> this._releaseButton('right'), false);
-    //////////wasd
-        //s A
-            scene.input.keyboard.on('keydown-S', ()=> this._applyButton(scene, 'A', 0), false).on('keyup-S', ()=> this._releaseButton('A'), false);
-        //d B
-            scene.input.keyboard.on('keydown-D', ()=> this._applyButton(scene, 'B', 0), false).on('keyup-D', ()=> this._releaseButton('B'), false);
-        //w  C
-            scene.input.keyboard.on('keydown-W', ()=> this._applyButton(scene, 'C', 0), false).on('keyup-W', ()=> this._releaseButton('C'), false);
-        //a D
-            scene.input.keyboard.on('keydown-A', ()=> this._applyButton(scene, 'D', 0), false).on('keyup-A', ()=> this._releaseButton('D'), false);
-        //enter CHAT
-            scene.input.keyboard.on('keydown-ENTER', ()=> this._applyButton(scene, 'enter', 0), false);
+    }
 
-        }
-        //-----------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------- gamepad
 
         public gamepadControls(scene: Phaser.Scene): void
         {
@@ -287,39 +284,39 @@ export class Inputs {
               if (System.Process.app.game.gameState === true && System.Process.app.game.cutScene === false)
               {
                   if (button.index === 9) 
-                      this._applyButton(scene, 'start', 0);
+                      this._applyButton('start');
                   if (button.index === 8) 
-                      this._applyButton(scene, 'select', 0);
+                      this._applyButton('select');
                   if (pad.left) 
-                      this._applyButton(scene, 'left', 0);
+                      this._applyButton('left');
                   if (pad.right) 
-                      this._applyButton(scene, 'right', 0);
+                      this._applyButton('right');
                   if (pad.up || pad.L2) 
-                      this._applyButton(scene, 'up', 0);
+                      this._applyButton('up');
                   if (pad.down || pad.L1) 
-                      this._applyButton(scene, 'down', 0);
+                      this._applyButton('down');
   
                   if (System.Process.app.input.mode === 'A')
                   {
                       if (pad.A || pad.R1) 
-                          this._applyButton(scene, 'A', 0);
+                          this._applyButton('A');
                       if (pad.B || pad.R2) 
-                          this._applyButton(scene, 'B', 0);
+                          this._applyButton('B');
                       if (pad.Y) 
-                          this._applyButton(scene, 'C', 0);
+                          this._applyButton('C');
                       if (pad.X) 
-                          this._applyButton(scene, 'D', 0);
+                          this._applyButton('D');
                   }
                   else
                   {
                       if (pad.B || pad.R1) 
-                          this._applyButton(scene, 'A', 0);
+                          this._applyButton('A');
                       if (pad.A || pad.R2) 
-                          this._applyButton(scene, 'B', 0);
+                          this._applyButton('B');
                       if (pad.X) 
-                          this._applyButton(scene, 'C', 0);
+                          this._applyButton('C');
                       if (pad.Y) 
-                          this._applyButton(scene, 'D', 0);
+                          this._applyButton('D');
                   }
               }
             })
