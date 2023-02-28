@@ -10,7 +10,7 @@ export class UI {
 
     //-----------------------------------------------------------
 
-    listen (scene: Phaser.Scene, key: string, callback?: any)  
+    public listen (scene: Phaser.Scene, key: string, callback?: any): void  
     {
    
         const _resize = (scene: Phaser.Scene, key: string) => {
@@ -34,17 +34,15 @@ export class UI {
     
 //-----------------------------------------------------------
 
-    callSizer (scene: Phaser.Scene)
+    private callSizer (scene: Phaser.Scene): void
     {
-        return (
-            this.parent = new Phaser.Structs.Size(scene.scale.gameSize.width, scene.scale.gameSize.height).setSize(scene.scale.gameSize.width, scene.scale.gameSize.height),
-            this.sizer = new Phaser.Structs.Size(scene.cameras.main.width, scene.cameras.main.height, Phaser.Structs.Size.FIT, this.parent).setSize(scene.scale.gameSize.width, scene.scale.gameSize.height)
-        );
+        this.parent = new Phaser.Structs.Size(scene.scale.gameSize.width, scene.scale.gameSize.height).setSize(scene.scale.gameSize.width, scene.scale.gameSize.height),
+        this.sizer = new Phaser.Structs.Size(scene.cameras.main.width, scene.cameras.main.height, Phaser.Structs.Size.FIT, this.parent).setSize(scene.scale.gameSize.width, scene.scale.gameSize.height)
     }
 
 //-----------------------------------------------------------
 
-    checkOrientation (scene: Phaser.Scene, key: string) 
+    private checkOrientation (scene: Phaser.Scene, key: string): [number, number] | null
     {
         switch (key)
         {
@@ -67,6 +65,8 @@ export class UI {
                     return System.Config.isLandscape(scene) ? [1700, 1200] : [800, 1200];
                 else 
                     return [2200, 980];
+            default: 
+                return null;
         }
     }
 
@@ -121,7 +121,7 @@ export class UI {
 
 //-------------------------------------------------------------
 
-    setCamera (scene: Phaser.Scene, x: number, y: number, pos: boolean)
+    private setCamera (scene: Phaser.Scene, x: number, y: number, pos: boolean): void
     {
         if (pos === true)
         {
@@ -152,7 +152,7 @@ export class UI {
 
 //-------------------------------------------------------------
 
-    resize(scene: Phaser.Scene, key: string)
+    public resize(scene: Phaser.Scene, key: string): void
     {
     
         const orientation = this.checkOrientation(scene, key); 
