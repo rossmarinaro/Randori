@@ -17,8 +17,6 @@ export class Boot extends Phaser.Scene {
 
         async init(): Promise<void>
         {
-            
-            this.data = await System.Process.app.refreshApp(); 
 
          //call full screen if available
 
@@ -27,7 +25,7 @@ export class Boot extends Phaser.Scene {
             
         }
 
-        async preload(): Promise<void>
+        async preload(): Promise<void> 
         {
             // assets
 
@@ -49,7 +47,7 @@ export class Boot extends Phaser.Scene {
 
             //gameplay data object (gets passed scene to scene)
             
-                this.scene.run('Preload', this.data);
+                this.scene.run('Preload');
     
             });
         }

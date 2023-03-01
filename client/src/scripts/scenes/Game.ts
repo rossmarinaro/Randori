@@ -4,6 +4,7 @@ import { Aikidoka } from '../objects/Aikidoka';
 
 export class Game extends Phaser.Scene {
 
+
   private timeLeft: number
   private player: any
   private entities: Aikidoka[] = []
@@ -18,8 +19,8 @@ export class Game extends Phaser.Scene {
   async create(): Promise<void>
   {
 
-    let gameOver = false,
-        zoom = 1;
+    let zoom = 1,
+        gameOver = false;
 
     this.timeLeft = 20;
 
@@ -28,7 +29,6 @@ export class Game extends Phaser.Scene {
 
     else if (System.Config.isDesktop(this))
       zoom = 6;//5;
-
 
     this.cameras.main.setZoom(zoom);
 
@@ -41,9 +41,9 @@ export class Game extends Phaser.Scene {
 
     System.Process.app.hud = this.scene.run('HUD', this);
 
-    this.player = new System.Process.app.player(this, this.scale.width / 2 - 50, this.scale.height / 2, 'nage', true);
+    this.player = new System.Process.app.aikidoka(this, this.scale.width / 2 - 50, this.scale.height / 2, 'nage', true);
 
-    this.spawnUke(System.Process.app.data.currentLevel);
+    this.spawnUke();
   
     //collisions
 
@@ -54,7 +54,7 @@ export class Game extends Phaser.Scene {
 
         this.entities.forEach(i => {
 
-          if (this.physics.world.overlap(nage, i) && i.hitbox.active)
+          if (this.physics.world.overlap(nage, i) && i.hitbox.active && i.flipX !== this.player.flipX)
           {
             uke['setUkeState']('roll');
     
@@ -85,31 +85,13 @@ export class Game extends Phaser.Scene {
     });
 
 
-    //camera update / shift objects to fit
+    this.scale.on('resize', () => {
+        if (gameOver)
+          return;
 
-    document.addEventListener('fullscreenchange', () => {    
-      
-        this.cameras.main.centerOn(this.cameras.main.width / 2, this.cameras.main.height / 2);
-  
-        this.background.setPosition(this.cameras.main.width / 2, this.cameras.main.height / 2); 
-
-        this.player.setScale(0.6).setPosition(this.cameras.main.width / 2 - 40, this.cameras.main.height / 2);
-
-        this.entities.forEach(i => i.setScale(0.6).setPosition(this.cameras.main.width / 2 + 40, this.cameras.main.height / 2));
-
-      //restart scene if exiting fullscreen (a hack, does not affect score or spawn count)
-
-        if (!this.scale.isFullscreen)
-        {
-          if (gameOver)
-            return;
-
-           gameOver = true;
-
-          this.time.delayedCall(500, () => this.scene.restart());
-        }
+        gameOver = true;
+        this.scene.restart();
     });
-
 
     
   }
@@ -133,13 +115,13 @@ export class Game extends Phaser.Scene {
 
   //---------------------- uke spawner
 
-  private spawnUke(amount: number): void
+  private spawnUke(): void
   {
     
     let initialX = 1, 
         initialY = 1;
 
-    for (let i = 0; i < amount; i++)
+    for (let i = 0; i < System.Process.app.data.currentLevel; i++)
     {
       if (i === 1)
       {
@@ -156,12 +138,13 @@ export class Game extends Phaser.Scene {
           x = this.scale.width / 2 + initialX,
           y = this.scale.height / 2 + initialY;
 
-      new System.Process.app.player(this, x, y, 'uke', false).setFlipX(true);
+      new System.Process.app.aikidoka(this, x, y, 'uke', false).setFlipX(true);
     }
   }
 
 
   //---------------- game over
+
 
   private endGame(): void
   {
@@ -169,6 +152,7 @@ export class Game extends Phaser.Scene {
     this.scene.launch('GameOver');
     this.scene.stop('Game');
   }
+
 
 
 }

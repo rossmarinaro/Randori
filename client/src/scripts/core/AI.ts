@@ -7,9 +7,7 @@ export function ukeAI(scene: Phaser.Scene, uke: Aikidoka): void
   if (uke.state === 'kokyu' || uke.state === 'roll') //stop actions if uke is in the following states
     return
 
-  let ukeSpeed = System.Process.app.data.ukeSpeed + Math.random() * 5 + 1;
-
-  scene.physics.moveToObject(uke, scene['player'], ukeSpeed); 
+  scene.physics.moveToObject(uke, scene['player'], System.Process.app.data.ukeSpeed); 
 
   uke.hitbox.setPosition(uke.x, uke.y);
 

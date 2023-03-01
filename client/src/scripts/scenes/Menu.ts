@@ -8,10 +8,10 @@ export class Menu extends Phaser.Scene {
     super(System.Process.setup);
   }
 
-  async create(scene: Phaser.Scene): Promise<void> 
-  {
+  //-----------------------
 
-    this.data = scene.data;
+  async create(): Promise<void> 
+  {
 
     this.cameras.main
     .fadeIn(3000)
@@ -33,10 +33,11 @@ export class Menu extends Phaser.Scene {
 
     });
 
-    document.addEventListener('fullscreenchange', () => this.cameras.main.centerOn(this.cameras.main.width / 2, this.cameras.main.height / 2));
-
+    this.scale.on('resize', () => this.scene.settings.active && this.scene.restart());
 
   }
+
+  //-------------------------
 
   private startGame(): void
   {

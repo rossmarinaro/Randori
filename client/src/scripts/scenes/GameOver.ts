@@ -20,7 +20,7 @@ export class GameOver extends Phaser.Scene {
     .centerOn(this.scale.width / 2, this.scale.height / 2)
     .setZoom(System.Config.mobileAndTabletCheck() ? 0.5 : 1);
 
-    System.Process.app.data.currentLevel = 1;
+    System.Process.app.data.currentLevel = 2;
     System.Process.app.data.score = 0;
     System.Process.app.audio.play(this, 'shakuhachi1');
 
@@ -34,8 +34,8 @@ export class GameOver extends Phaser.Scene {
         this.input.once('pointerdown', ()=> this.startGame());
     });
 
-    document.addEventListener('fullscreenchange', () => this.cameras.main.centerOn(this.cameras.main.width / 2, this.cameras.main.height / 2));
 
+    this.scale.on('resize', () => this.scene.settings.active && this.scene.restart());
 
   }
 

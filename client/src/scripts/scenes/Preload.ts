@@ -19,13 +19,13 @@ export class Preload extends Phaser.Scene {
     await parseResources(this, this.cache.json.get('resources_main')); 
   }
 
-  private create(scene: Phaser.Scene): void 
+  private create(): void 
   {
 
 
     anims(this);
 
-    this.scene.run('Menu', scene)
+    this.scene.run('Menu')
     this.scene.stop('Preload');
     
     /**

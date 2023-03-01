@@ -200,21 +200,21 @@ export class Inputs {
 
         scene.input.addPointer(1);
 
-        this.joystick.A.base = scene.add.circle(100, 450, 50, 0x000000).setAlpha(0.5);
-        this.joystick.A.thumb = scene.add.circle(100, 450, 30, 0xcccccc).setAlpha(0.5);
+        this.joystick.A.base = scene.add.circle(50, 450, 50, 0x000000).setAlpha(0.5);
+        this.joystick.A.thumb = scene.add.circle(50, 450, 30, 0xcccccc).setAlpha(0.5);
         this.joystick.A.self = joystickPlugin.add(scene, {
             forceX: 0,
             forceY: 0,
-            x: 100,
+            x: 50,
             y: 450,
             radius: 60,
             base: this.joystick.A.base,
             thumb: this.joystick.A.thumb
         });
         
-        this.buttons.A = scene.add.circle(scene.scale.width - 80, 500, 20, 0x000000).setAlpha(0.5)
-            .setInteractive()
-            .on('pointerdown', ()=> this.target.applyState('kokyu'));
+        // this.buttons.A = scene.add.circle(scene.scale.width - 80, 500, 20, 0x000000).setAlpha(0.5)
+        //     .setInteractive()
+        //     .on('pointerdown', ()=> this.target.applyState('kokyu'));
 
         this.buttons.B = scene.add.circle(scene.scale.width - 100, 550, 20, 0x000000).setAlpha(0.5)
             .setInteractive()

@@ -19,7 +19,7 @@ import { UI } from './UI'
 
 export default class Application {
   
-  public player: typeof Aikidoka
+  public aikidoka: typeof Aikidoka
   public audio: typeof AudioManager = AudioManager
   public data: typeof GameData = GameData
   public ui: UI
@@ -31,7 +31,6 @@ export default class Application {
   private parent: string
   private backgroundColor: string
   private pixelArt: boolean
-  public groups?: any
   private scene: Phaser.Scene[]
   private dom: { createContainer: boolean }
   private input: input
@@ -86,18 +85,11 @@ export default class Application {
       ];
 
       this.ui = new UI;
-      this.player = Aikidoka;
+      this.aikidoka = Aikidoka;
   }
 
 
-//--------------------------------------------- reinit variables
 
-    public async refreshApp(): Promise<Phaser.Data.DataManager>
-    { 
-
-        System.Process.app.gameData = new GameData;
-        return System.Process.app.gameData;
-    }
 
 
 }

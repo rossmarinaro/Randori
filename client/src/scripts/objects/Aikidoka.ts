@@ -46,8 +46,6 @@ export class Aikidoka extends Phaser.Physics.Arcade.Sprite {
       scene['entities'].push(this); 
       this.hitbox = scene.add.rectangle(0, 0, 5, 20); scene.physics.world.enable(this.hitbox);
 
-      System.Process.app.data.ukeSpeed = System.Process.app.data.currentLevel * 5;
-
       //roll player proxy function
 
       this.setUkeState = (state: string) => this.applyState(state); 
